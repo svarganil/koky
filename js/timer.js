@@ -12,7 +12,7 @@ class EggTimer {
     this.tickCount = 60;
     this.radius = window.innerWidth < 600 ? 110 : 160;
     this.onFinish = null;
-    this.alarm = new Audio("timer.mp3");
+    this.alarm = new Audio("assets/timer.mp3");
     this.alarm.preload = "auto";
 
     this.build();
@@ -62,8 +62,8 @@ class EggTimer {
     controls.appendChild(this.startBtn);
     controls.appendChild(this.resetBtn);
 
-    this.container.appendChild(this.displayEl);
     this.container.appendChild(scene);
+    this.container.appendChild(this.displayEl);
     this.container.appendChild(controls);
     this.container.appendChild(this.statusEl);
 
@@ -78,11 +78,6 @@ class EggTimer {
       tick.className = `timer-tick ${isMajor ? "major" : "minor"}`;
       const angle = i * step;
       tick.style.transform = `rotateY(${angle}deg) translateZ(${this.radius}px)`;
-      if (isMajor) {
-        const label = document.createElement("span");
-        label.textContent = i;
-        tick.appendChild(label);
-      }
       this.ringEl.appendChild(tick);
     }
   }

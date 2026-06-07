@@ -124,9 +124,8 @@ function renderResult() {
         <div class="result-time-label">Время после закипания</div>
         <div class="result-time-value">${timeStr}</div>
         <div class="result-time-hint">Положите яйца в кипящую воду и запустите таймер</div>
+        <div id="timer-mount"></div>
       </div>
-
-      <div id="timer-mount"></div>
 
       <div class="result-actions">
         <button class="btn btn-secondary" id="btn-restart">Новый расчёт</button>
