@@ -38,6 +38,9 @@ const state = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  applyTimeTheme();
+  window.setInterval(applyTimeTheme, 60000);
+
   const elements = {
     setupScreen: document.getElementById("setupScreen"),
     timerScreen: document.getElementById("timerScreen"),
@@ -68,6 +71,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updatePreview(elements);
 });
+
+function applyTimeTheme(date = new Date()) {
+  const theme = getTimeTheme(date);
+  document.body.classList.remove("theme-morning", "theme-day", "theme-evening", "theme-night");
+  document.body.classList.add(`theme-${theme}`);
+}
+
+function getTimeTheme(date) {
+  const hour = date.getHours();
+
+  if (hour >= 6 && hour < 12) {
+    return "morning";
+  }
+
+  if (hour >= 12 && hour < 18) {
+    return "day";
+  }
+
+  if (hour >= 18 && hour < 23) {
+    return "evening";
+  }
+
+  return "night";
+}
 
 function selectChoice(button) {
   const group = button.dataset.group;
