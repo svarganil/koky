@@ -1,85 +1,120 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>КОКИ — Эксперт по яйцам</title>
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="КОКИ" />
-  <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/timer.css">
-</head>
-<body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <img class="brand-title" src="assets/logo.png" alt="КОКИ">
-        <div class="brand-subtitle">ТВОИ ЯЙКИ —<br>В НАДЁЖНЫХ РУКАХ</div>
-      </div>
-      <a href="index.html" class="nav-link active rounded">Варка</a>
-      <a href="recipes.html" class="nav-link">Рецепты</a>
-      <a href="hints.html" class="nav-link">Подсказки</a>
-      <div class="nav-footer">v1.0</div>
-    </aside>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КОКИ</title>
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="КОКИ" />
+<link rel="manifest" href="site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <link rel="icon" href="./assets/peck.gif" type="image/gif">
+    <link rel="stylesheet" href="./style.css">
+  </head>
 
-    <main class="main">
-      <header class="page-header">
-        <h1 class="page-title">Варка яиц</h1>
-        <p class="page-subtitle">Выберите параметры — мы подскажем точное время после закипания воды</p>
+  <body>
+    <div class="app-shell">
+      <header class="retro-header app-header">
+        <p class="game-kicker">RETRO EGG TIMER</p>
+        <h1 class="retro-heading">КОКИ</h1>
+        <p class="retro-paragraph app-tagline">выбери режим и запускай варку</p>
       </header>
 
-      <div class="steps" aria-hidden="true">
-        <div class="step-dot active"></div>
-        <div class="step-dot"></div>
-        <div class="step-dot"></div>
-        <div class="step-dot"></div>
-      </div>
+      <main class="retro-main app-main">
+        <section class="app-panel setup-screen" id="setupScreen" aria-labelledby="setupTitle">
+          <div class="panel-head">
+            <span class="retro-badge retro-badge--info">START</span>
+            <h2 class="retro-subheading" id="setupTitle">Настройка яйца</h2>
+          </div>
 
-      <div id="step-container"></div>
+          <ol class="setup-steps">
+            <li class="setup-step">
+              <div class="step-title">
+                <span class="step-number">1</span>
+                <h3>Тип варки</h3>
+              </div>
+              <div class="choice-grid choice-grid--three" role="radiogroup" aria-label="Тип варки">
+                <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true">Всмятку</button>
+                <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false">В мешочек</button>
+                <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false">Вкрутую</button>
+              </div>
+            </li>
 
-      <nav class="wizard-nav">
-        <button class="btn btn-secondary hidden" id="btn-back">Назад</button>
-        <button class="btn btn-primary" id="btn-next" disabled>Далее</button>
-      </nav>
-    </main>
+            <li class="setup-step">
+              <div class="step-title">
+                <span class="step-number">2</span>
+                <h3>Размер яйца</h3>
+              </div>
+              <div class="choice-grid choice-grid--five" role="radiogroup" aria-label="Размер яйца">
+                <button class="retro-button retro-button--secondary choice-button is-selected" type="button" data-group="size" data-value="СВ" aria-pressed="true">СВ</button>
+                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С0" aria-pressed="false">С0</button>
+                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С1" aria-pressed="false">С1</button>
+                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С2" aria-pressed="false">С2</button>
+                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С3" aria-pressed="false">С3</button>
+              </div>
+            </li>
 
-    <aside class="panel">
-      <div class="ticker">
-        <div class="ticker-content">
-          <span class="ticker-item">Яйца комнатной температуры варятся быстрее</span>
-          <span class="ticker-item">Крупные яйца СВ требуют больше времени</span>
-          <span class="ticker-item">Охладите яйца в ледяной воде после варки</span>
-          <span class="ticker-item">Не переваривайте — желток станет серым</span>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="panel-title">Быстрые советы</div>
-        <div class="tip-card">
-          <div class="tip-card-title">Кипящая вода</div>
-          <p>Таймер запускайте, когда вода активно кипит и яйца уже в кастрюле.</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-card-title">Один слой</div>
-          <p>Яйца должны лежать в один ряд и быть полностью покрыты водой.</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-card-title">Охлаждение</div>
-          <p>После варки переложите яйца в холодную воду на 2–3 минуты.</p>
-        </div>
-        <div class="feature-box">
-          <div class="feature-box-title">Скоро</div>
-          <p>Рецепты с яйцами и полезные лайфхаки — в разделах меню</p>
-        </div>
-      </div>
-    </aside>
-  </div>
+            <li class="setup-step">
+              <div class="step-title">
+                <span class="step-number">3</span>
+                <h3>Температура</h3>
+              </div>
+              <div class="choice-grid choice-grid--two" role="radiogroup" aria-label="Температура яиц">
+                <button class="retro-button retro-button--constructive choice-button is-selected" type="button" data-group="temperature" data-value="room" aria-pressed="true">Комнатная температура</button>
+                <button class="retro-button retro-button--constructive choice-button" type="button" data-group="temperature" data-value="cold" aria-pressed="false">Из холодильника</button>
+              </div>
+            </li>
+          </ol>
 
-  <script src="js/data.js"></script>
-  <script src="js/timer.js"></script>
-  <script src="js/app.js"></script>
-</body>
+          <div class="start-console" aria-live="polite">
+            <div class="time-preview">
+              <span>Время</span>
+              <strong id="selectedTime">05:00</strong>
+            </div>
+            <div class="recipe-preview" id="recipePreview">Комнатная температура / всмятку / СВ</div>
+            <button class="retro-button retro-button--destructive retro-button--large start-button" id="startButton" type="button">Старт</button>
+          </div>
+        </section>
+
+        <section class="app-panel timer-screen is-hidden" id="timerScreen" aria-labelledby="timerTitle" aria-live="polite">
+          <div class="timer-scene">
+            <div class="chicken-stage" aria-label="Игровая сцена">
+              <img class="chicken-gif" id="chickenGif" src="./assets/peck.gif" alt="Курица клюет">
+            </div>
+
+            <div class="timer-console">
+              <span class="retro-badge retro-badge--warning" id="timerState">ВАРИМ</span>
+              <h2 class="timer-title" id="timerTitle">До готовности</h2>
+              <div class="timer-display" id="timerDisplay">05:00</div>
+              <p class="timer-recipe" id="timerRecipe">Комнатная температура / всмятку / СВ</p>
+
+              <div class="retro-progress-bar timer-progress" aria-label="Прогресс таймера">
+                <div class="retro-progress-bar__inner" id="progressBar"></div>
+              </div>
+
+              <div class="timer-actions">
+                <button class="retro-button retro-button--secondary retro-button--medium" id="pauseButton" type="button">Пауза</button>
+                <button class="retro-button retro-button--ghost retro-button--medium" id="resetButton" type="button">Сначала</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="retro-footer app-footer">
+        <div class="ground" aria-hidden="true"></div>
+      </footer>
+    </div>
+
+    <div class="retro-toast" id="alarmToast" role="status">
+      <p>КОКИ: яйцо готово!</p>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
 </html>

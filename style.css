@@ -1,0 +1,609 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  color: #000;
+  background-color: #00B0EB;
+  background-image: url(https://i.imgur.com/zwZ2RGM.png);
+  background-position: top center;
+  background-repeat: repeat;
+  background-size: 75%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.retro-header,
+.retro-footer {
+  width: 100%;
+  position: relative;
+}
+
+.retro-header {
+  padding: 28px 16px 10px;
+  text-align: center;
+}
+
+.retro-footer {
+  margin-top: auto;
+  background-color: #776548;
+}
+
+.app-main {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 12px 16px 28px;
+}
+
+.retro-heading {
+  margin: 0 0 14px;
+  font-size: 48px;
+  color: #ffcc00;
+  text-shadow: 4px 4px #000;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.retro-subheading {
+  margin: 0;
+  font-size: 20px;
+  color: #ffcc00;
+  text-shadow: 2px 2px #000;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.retro-paragraph {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #000;
+}
+
+.game-kicker {
+  margin: 0 0 10px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: #fff;
+  text-shadow: 2px 2px #000;
+}
+
+.app-tagline {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.app-panel {
+  width: min(100%, 1040px);
+  background-color: #fff;
+  border: 4px solid #000;
+  box-shadow: 0 8px #cc9900;
+  padding: 24px;
+  align-self: flex-start;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.setup-steps {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.setup-step {
+  border: 4px solid #000;
+  background-color: #f9f9f9;
+  padding: 18px;
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.step-title h3 {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000;
+  letter-spacing: 0;
+}
+
+.step-number {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffcc00;
+  border: 4px solid #000;
+  box-shadow: 0 4px #cc9900;
+  font-size: 12px;
+}
+
+.choice-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.choice-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.choice-grid--five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.choice-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.retro-button {
+  border: 4px solid #000;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 10px 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out;
+  outline: none;
+  min-height: 48px;
+}
+
+.retro-button:hover,
+.retro-button:focus {
+  transform: translateY(2px);
+}
+
+.retro-button:active {
+  transform: translateY(4px);
+}
+
+.retro-button--small {
+  font-size: 11px;
+  padding: 6px 10px;
+}
+
+.retro-button--medium {
+  font-size: 12px;
+  padding: 10px 16px;
+}
+
+.retro-button--large {
+  font-size: 16px;
+  padding: 14px 24px;
+}
+
+.retro-button--primary {
+  background-color: #ffcc00;
+  color: #000;
+  box-shadow: 0 4px #cc9900;
+}
+
+.retro-button--primary:hover,
+.retro-button--primary:focus,
+.retro-button--primary.is-selected {
+  background-color: #ffd700;
+}
+
+.retro-button--secondary {
+  background-color: #0099cc;
+  color: #fff;
+  box-shadow: 0 4px #006699;
+}
+
+.retro-button--secondary:hover,
+.retro-button--secondary:focus,
+.retro-button--secondary.is-selected {
+  background-color: #00bfff;
+}
+
+.retro-button--ghost {
+  background-color: transparent;
+  color: #000;
+  border: 4px dashed #000;
+  box-shadow: none;
+}
+
+.retro-button--ghost:hover,
+.retro-button--ghost:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.retro-button--destructive {
+  background-color: #ff3333;
+  color: #fff;
+  box-shadow: 0 4px #cc0000;
+}
+
+.retro-button--destructive:hover,
+.retro-button--destructive:focus {
+  background-color: #ff6666;
+}
+
+.retro-button--constructive {
+  background-color: #33cc33;
+  color: #fff;
+  box-shadow: 0 4px #009900;
+}
+
+.retro-button--constructive:hover,
+.retro-button--constructive:focus,
+.retro-button--constructive.is-selected {
+  background-color: #66ff66;
+}
+
+.choice-button {
+  width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.choice-button.is-selected {
+  outline: 4px solid #000;
+  outline-offset: 3px;
+}
+
+.start-console {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  margin-top: 22px;
+  padding: 18px;
+  border: 4px solid #000;
+  background-color: #ffcc00;
+}
+
+.time-preview {
+  display: grid;
+  gap: 8px;
+  min-width: 130px;
+}
+
+.time-preview span,
+.recipe-preview,
+.timer-recipe {
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.time-preview strong {
+  font-size: 24px;
+  line-height: 1.2;
+  color: #000;
+}
+
+.recipe-preview {
+  text-align: left;
+}
+
+.start-button {
+  min-width: 150px;
+}
+
+.timer-screen {
+  padding: 20px;
+}
+
+.timer-scene {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(300px, 420px);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.chicken-stage {
+  min-height: 430px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  border: 4px solid #000;
+  background-color: #00B0EB;
+  background-image: url(https://i.imgur.com/zwZ2RGM.png);
+  background-position: top center;
+  background-repeat: repeat;
+  background-size: 110%;
+  overflow: hidden;
+}
+
+.chicken-gif {
+  width: min(100%, 520px);
+  height: auto;
+  image-rendering: pixelated;
+  display: block;
+}
+
+.timer-console {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  border: 4px solid #000;
+  background-color: #f9f9f9;
+  padding: 22px;
+  text-align: center;
+}
+
+.timer-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+  letter-spacing: 0;
+}
+
+.timer-display {
+  padding: 18px 12px;
+  border: 4px solid #000;
+  background-color: #000;
+  color: #ffcc00;
+  font-size: 44px;
+  line-height: 1.2;
+  text-shadow: 3px 3px #cc0000;
+}
+
+.timer-recipe {
+  margin: 0;
+}
+
+.retro-progress-bar {
+  background-color: #000;
+  border: 4px solid #000;
+  width: 100%;
+  height: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.retro-progress-bar__inner {
+  width: 0%;
+  height: 100%;
+  background-color: #ffcc00;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.2s linear;
+}
+
+.timer-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.retro-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 6px 10px;
+  font-size: 10px;
+  line-height: 1.4;
+  border: 4px solid #000;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.retro-badge--info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-color: #000;
+}
+
+.retro-badge--warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border-color: #000;
+}
+
+.retro-badge--danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #000;
+}
+
+.retro-badge--success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #000;
+}
+
+.retro-toast {
+  visibility: hidden;
+  min-width: 260px;
+  max-width: calc(100vw - 32px);
+  background-color: #000;
+  color: #ffcc00;
+  text-align: center;
+  border: 4px solid #ffcc00;
+  padding: 16px;
+  position: fixed;
+  z-index: 5;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.retro-toast p {
+  margin: 0;
+}
+
+.retro-toast.show {
+  visibility: visible;
+  animation: fadein 0.3s, fadeout 0.4s 3.2s;
+}
+
+.ground {
+  height: 34px;
+  background-color: #776548;
+  border-top: 4px solid #000;
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.25) 25%, transparent 25%),
+    linear-gradient(90deg, transparent 75%, rgba(0, 0, 0, 0.18) 75%);
+  background-size: 32px 16px;
+}
+
+.is-hidden {
+  display: none;
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-main {
+    padding: 10px 12px 24px;
+  }
+
+  .app-panel {
+    padding: 18px;
+  }
+
+  .panel-head,
+  .start-console,
+  .timer-scene {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-head {
+    align-items: flex-start;
+  }
+
+  .choice-grid--three,
+  .choice-grid--five {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .start-console {
+    text-align: center;
+  }
+
+  .recipe-preview {
+    text-align: center;
+  }
+
+  .start-button {
+    width: 100%;
+  }
+
+  .chicken-stage {
+    min-height: 330px;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    background-size: 140%;
+  }
+
+  .retro-header {
+    padding-top: 20px;
+  }
+
+  .retro-heading {
+    font-size: 34px;
+    text-shadow: 3px 3px #000;
+  }
+
+  .retro-subheading {
+    font-size: 16px;
+  }
+
+  .app-panel {
+    padding: 14px;
+    box-shadow: 0 6px #cc9900;
+  }
+
+  .setup-step,
+  .start-console,
+  .timer-console {
+    padding: 14px;
+  }
+
+  .choice-grid,
+  .choice-grid--two,
+  .choice-grid--three,
+  .choice-grid--five,
+  .timer-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .retro-button,
+  .retro-button--medium,
+  .retro-button--large {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+
+  .timer-display {
+    font-size: 32px;
+  }
+
+  .time-preview strong {
+    font-size: 20px;
+  }
+
+  .chicken-stage {
+    min-height: 260px;
+  }
+}
