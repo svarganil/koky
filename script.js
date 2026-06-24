@@ -34,12 +34,14 @@ const state = {
   running: false,
   finished: false,
   audioContext: null,
-  alarmId: null
+  alarmId: null,
+  serviceWorkerRegistration: null
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   applyTimeTheme();
   window.setInterval(applyTimeTheme, 60000);
+  registerServiceWorker();
 
   const elements = {
     setupScreen: document.getElementById("setupScreen"),
@@ -119,6 +121,7 @@ function updatePreview(elements) {
 function startTimer(elements) {
   stopAlarm(elements);
   initAudio();
+  requestNotificationPermission();
 
   state.totalSeconds = parseTime(getCurrentTime());
   state.remainingSeconds = state.totalSeconds;
@@ -207,6 +210,7 @@ function finishTimer(elements) {
   elements.chickenGif.alt = "Курица кудахчет";
   showToast(elements);
   playAlarm();
+  showTimerNotification();
 }
 
 function getCurrentTime() {
@@ -237,6 +241,67 @@ function initAudio() {
 
   state.audioContext = new AudioConstructor();
   state.audioContext.resume();
+}
+
+async function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || !window.isSecureContext) {
+    return null;
+  }
+
+  try {
+    state.serviceWorkerRegistration = await navigator.serviceWorker.register("./service-worker.js");
+    return state.serviceWorkerRegistration;
+  } catch {
+    return null;
+  }
+}
+
+function requestNotificationPermission() {
+  if (!("Notification" in window) || Notification.permission !== "default") {
+    return;
+  }
+
+  const permissionRequest = Notification.requestPermission();
+
+  if (permissionRequest && typeof permissionRequest.catch === "function") {
+    permissionRequest.catch(() => {});
+  }
+}
+
+async function showTimerNotification() {
+  if (!("Notification" in window) || Notification.permission !== "granted") {
+    return;
+  }
+
+  const body = `${getRecipeLabel()} готово`;
+
+  try {
+    const registration = state.serviceWorkerRegistration || await registerServiceWorker();
+
+    if (registration && "showNotification" in registration) {
+      await registration.showNotification("КОКИ: яйцо готово!", {
+        body,
+        icon: "./web-app-manifest-192x192.png",
+        badge: "./favicon-96x96.png",
+        tag: "koki-timer",
+        renotify: true
+      });
+      return;
+    }
+
+    new Notification("КОКИ: яйцо готово!", {
+      body,
+      icon: "./web-app-manifest-192x192.png",
+      tag: "koki-timer"
+    });
+  } catch {
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: "KOKI_TIMER_DONE",
+        body
+      });
+    }
+  }
 }
 
 function playAlarm() {

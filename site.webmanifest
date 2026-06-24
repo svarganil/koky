@@ -1,6 +1,9 @@
 {
   "name": "КОКИ",
   "short_name": "КОКИ",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
