@@ -11,8 +11,6 @@ html {
 body {
   min-height: 100%;
   margin: 0;
-  position: relative;
-  overflow-x: hidden;
   font-family: 'Press Start 2P', cursive;
   color: #000;
   background-color: #00B0EB;
@@ -32,219 +30,6 @@ body {
   animation: clouds-drift 92s linear infinite;
 }
 
-body::before,
-body::after {
-  content: '';
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-body::before {
-  width: 1px;
-  height: 1px;
-}
-
-body::after {
-  width: 2px;
-  height: 2px;
-}
-
-body.theme-day {
-  background-color: #00B0EB;
-  background-image:
-    url(https://i.imgur.com/zwZ2RGM.png),
-    url(https://i.imgur.com/zwZ2RGM.png),
-    url(https://i.imgur.com/zwZ2RGM.png);
-  background-position:
-    0 20px,
-    180px 150px,
-    -120px 320px;
-  background-repeat: repeat-x;
-  background-size:
-    480px auto,
-    680px auto,
-    940px auto;
-  animation: clouds-drift 92s linear infinite;
-}
-
-body.theme-morning {
-  background-color: #D27E35;
-  background-image:
-    linear-gradient(
-      to bottom,
-      #9375ED 0 12%,
-      #8F72DB 12% 24%,
-      #936FC5 24% 36%,
-      #A26CA8 36% 48%,
-      #B06B8A 48% 60%,
-      #BE706C 60% 72%,
-      #C77751 72% 84%,
-      #D27E35 84% 100%
-    );
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  animation: none;
-}
-
-body.theme-evening {
-  background-color: #D24C35;
-  background-image:
-    linear-gradient(
-      to bottom,
-      #3A227F 0 12%,
-      #4B2675 12% 24%,
-      #612A6A 24% 36%,
-      #782F5E 36% 48%,
-      #913551 48% 60%,
-      #AA3C45 60% 72%,
-      #BF443B 72% 84%,
-      #D24C35 84% 100%
-    );
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  animation: none;
-}
-
-body.theme-night {
-  background-color: #180D3A;
-  background-image: none;
-  animation: none;
-}
-
-body.theme-evening::before,
-body.theme-evening::after,
-body.theme-night::before,
-body.theme-night::after {
-  display: block;
-}
-
-body.theme-evening::before {
-  box-shadow:
-    8vw 10vh #fff5b8,
-    15vw 34vh #f8eec8,
-    24vw 18vh 0 1px #fff8d8,
-    31vw 56vh #fff0b0,
-    38vw 9vh #f4edff,
-    43vw 42vh 0 1px #ffeeb3,
-    51vw 22vh #fff8d8,
-    58vw 67vh #f8eec8,
-    66vw 12vh 0 1px #fff5b8,
-    73vw 36vh #f4edff,
-    81vw 20vh #fff8d8,
-    88vw 53vh 0 1px #ffeeb3,
-    94vw 14vh #fff0b0,
-    6vw 72vh #f4edff,
-    19vw 78vh 0 1px #fff8d8,
-    35vw 84vh #fff5b8,
-    47vw 76vh #f8eec8,
-    61vw 88vh 0 1px #fff0b0,
-    77vw 82vh #fff8d8,
-    91vw 73vh #f4edff,
-    11vw 48vh #fff5b8,
-    28vw 68vh #fff8d8,
-    53vw 6vh #f8eec8,
-    69vw 59vh #fff0b0,
-    84vw 91vh #fff8d8;
-  opacity: 0.78;
-}
-
-body.theme-evening::after {
-  box-shadow:
-    12vw 22vh #fff8d8,
-    33vw 31vh 0 1px #ffeeb3,
-    46vw 16vh #f4edff,
-    63vw 45vh 0 1px #fff5b8,
-    79vw 28vh #fff8d8,
-    92vw 64vh #ffeeb3,
-    21vw 63vh 0 1px #fff0b0,
-    40vw 91vh #f4edff,
-    57vw 72vh #fff8d8,
-    71vw 79vh 0 1px #fff5b8,
-    86vw 9vh #ffeeb3;
-  opacity: 0.72;
-}
-
-body.theme-night::before {
-  box-shadow:
-    3vw 8vh #fff8d8,
-    7vw 24vh #f4edff,
-    11vw 54vh 0 1px #fff5b8,
-    14vw 14vh #fff8d8,
-    17vw 72vh #f8eec8,
-    21vw 38vh #f4edff,
-    25vw 84vh 0 1px #fff0b0,
-    28vw 18vh #fff8d8,
-    31vw 61vh #f8eec8,
-    35vw 9vh #f4edff,
-    38vw 47vh 0 1px #fff5b8,
-    41vw 79vh #fff8d8,
-    45vw 28vh #f8eec8,
-    49vw 12vh #f4edff,
-    52vw 66vh #fff0b0,
-    55vw 36vh 0 1px #fff8d8,
-    59vw 6vh #f8eec8,
-    62vw 92vh #fff5b8,
-    66vw 22vh #f4edff,
-    69vw 58vh #fff8d8,
-    72vw 13vh 0 1px #fff0b0,
-    75vw 74vh #f8eec8,
-    79vw 42vh #fff5b8,
-    82vw 88vh #f4edff,
-    86vw 17vh #fff8d8,
-    89vw 64vh 0 1px #fff0b0,
-    93vw 33vh #f8eec8,
-    96vw 77vh #f4edff,
-    5vw 92vh #fff8d8,
-    13vw 88vh #fff5b8,
-    19vw 7vh #f4edff,
-    23vw 69vh #f8eec8,
-    30vw 96vh 0 1px #fff0b0,
-    37vw 25vh #fff8d8,
-    44vw 53vh #f4edff,
-    50vw 86vh #fff5b8,
-    57vw 49vh #f8eec8,
-    64vw 81vh 0 1px #fff8d8,
-    70vw 4vh #fff0b0,
-    77vw 57vh #f4edff,
-    84vw 68vh #fff8d8,
-    91vw 95vh #fff5b8,
-    98vw 48vh #f8eec8;
-  animation: stars-twinkle 3.8s steps(2, end) infinite;
-}
-
-body.theme-night::after {
-  box-shadow:
-    9vw 18vh 0 1px #fff8d8,
-    16vw 43vh #f4edff,
-    22vw 11vh 0 1px #fff5b8,
-    29vw 72vh #f8eec8,
-    34vw 35vh 0 1px #fff8d8,
-    39vw 91vh #fff0b0,
-    47vw 19vh 0 1px #f4edff,
-    54vw 58vh #fff8d8,
-    60vw 31vh 0 1px #fff5b8,
-    67vw 83vh #f8eec8,
-    74vw 26vh 0 1px #fff8d8,
-    80vw 52vh #f4edff,
-    87vw 8vh 0 1px #fff0b0,
-    94vw 69vh #fff8d8,
-    6vw 79vh 0 1px #fff5b8,
-    18vw 93vh #f8eec8,
-    32vw 6vh #f4edff,
-    43vw 76vh 0 1px #fff8d8,
-    56vw 97vh #fff0b0,
-    69vw 40vh 0 1px #fff5b8,
-    83vw 90vh #f8eec8,
-    97vw 24vh 0 1px #fff8d8;
-  animation: stars-twinkle 4.6s steps(2, end) infinite reverse;
-}
-
 button,
 input,
 textarea {
@@ -259,8 +44,6 @@ button {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
-  z-index: 1;
 }
 
 .retro-header,
@@ -616,7 +399,6 @@ button {
   display: flex;
   align-items: end;
   justify-content: center;
-  position: relative;
   border: 4px solid #000;
   background-color: #00B0EB;
   background-image:
@@ -633,168 +415,11 @@ button {
   overflow: hidden;
 }
 
-.chicken-stage::before,
-.chicken-stage::after {
-  content: '';
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.chicken-stage::before {
-  width: 1px;
-  height: 1px;
-}
-
-.chicken-stage::after {
-  width: 2px;
-  height: 2px;
-}
-
-body.theme-morning .chicken-stage {
-  background-color: #D27E35;
-  background-image:
-    linear-gradient(
-      to bottom,
-      #9375ED 0 12%,
-      #8F72DB 12% 24%,
-      #936FC5 24% 36%,
-      #A26CA8 36% 48%,
-      #B06B8A 48% 60%,
-      #BE706C 60% 72%,
-      #C77751 72% 84%,
-      #D27E35 84% 100%
-    );
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  animation: none;
-}
-
-body.theme-day .chicken-stage {
-  background-color: #00B0EB;
-  background-image:
-    url(https://i.imgur.com/zwZ2RGM.png),
-    url(https://i.imgur.com/zwZ2RGM.png);
-  background-position:
-    0 20px,
-    160px 120px;
-  background-repeat: repeat;
-  background-size:
-    360px auto,
-    620px auto;
-  animation: stage-clouds-drift 54s linear infinite;
-}
-
-body.theme-evening .chicken-stage {
-  background-color: #D24C35;
-  background-image:
-    linear-gradient(
-      to bottom,
-      #3A227F 0 12%,
-      #4B2675 12% 24%,
-      #612A6A 24% 36%,
-      #782F5E 36% 48%,
-      #913551 48% 60%,
-      #AA3C45 60% 72%,
-      #BF443B 72% 84%,
-      #D24C35 84% 100%
-    );
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  animation: none;
-}
-
-body.theme-night .chicken-stage {
-  background-color: #180D3A;
-  background-image: none;
-  animation: none;
-}
-
-body.theme-evening .chicken-stage::before,
-body.theme-evening .chicken-stage::after,
-body.theme-night .chicken-stage::before,
-body.theme-night .chicken-stage::after {
-  display: block;
-}
-
-body.theme-evening .chicken-stage::before {
-  box-shadow:
-    28px 36px #fff8d8,
-    92px 88px #f4edff,
-    158px 42px 0 1px #fff0b0,
-    236px 132px #fff8d8,
-    312px 76px #f8eec8,
-    386px 168px 0 1px #fff5b8,
-    472px 52px #f4edff,
-    545px 146px #fff8d8,
-    64px 226px #fff0b0,
-    194px 284px 0 1px #f8eec8,
-    356px 244px #fff8d8,
-    506px 310px #f4edff;
-  opacity: 0.75;
-}
-
-body.theme-evening .chicken-stage::after {
-  box-shadow:
-    128px 54px #fff5b8,
-    278px 104px 0 1px #fff8d8,
-    438px 218px #f4edff,
-    578px 92px #fff0b0,
-    86px 332px #fff8d8,
-    624px 348px 0 1px #f8eec8;
-  opacity: 0.68;
-}
-
-body.theme-night .chicken-stage::before {
-  box-shadow:
-    18px 28px #fff8d8,
-    46px 118px #f4edff,
-    72px 242px 0 1px #fff5b8,
-    104px 62px #fff8d8,
-    138px 326px #f8eec8,
-    174px 164px #f4edff,
-    212px 86px 0 1px #fff0b0,
-    246px 268px #fff8d8,
-    284px 36px #f8eec8,
-    318px 198px #f4edff,
-    356px 118px 0 1px #fff5b8,
-    392px 348px #fff8d8,
-    426px 72px #f8eec8,
-    468px 248px #f4edff,
-    506px 34px #fff0b0,
-    548px 184px 0 1px #fff8d8,
-    588px 304px #f8eec8,
-    626px 132px #fff5b8,
-    668px 226px #f4edff;
-  animation: stars-twinkle 3.8s steps(2, end) infinite;
-}
-
-body.theme-night .chicken-stage::after {
-  box-shadow:
-    84px 48px 0 1px #fff8d8,
-    152px 198px #f4edff,
-    236px 28px 0 1px #fff5b8,
-    304px 302px #f8eec8,
-    374px 154px 0 1px #fff8d8,
-    454px 92px #fff0b0,
-    528px 274px 0 1px #f4edff,
-    608px 38px #fff8d8,
-    658px 346px 0 1px #fff5b8;
-  animation: stars-twinkle 4.6s steps(2, end) infinite reverse;
-}
-
 .chicken-gif {
   width: min(100%, 520px);
   height: auto;
   image-rendering: pixelated;
   display: block;
-  position: relative;
-  z-index: 1;
 }
 
 .timer-console {
@@ -983,16 +608,6 @@ body.theme-night .chicken-stage::after {
   }
 }
 
-@keyframes stars-twinkle {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 0.92;
-  }
-}
-
 @media (max-width: 860px) {
   .app-main {
     padding: 10px 12px 24px;
@@ -1095,11 +710,7 @@ body.theme-night .chicken-stage::after {
 
 @media (prefers-reduced-motion: reduce) {
   body,
-  .chicken-stage,
-  body::before,
-  body::after,
-  .chicken-stage::before,
-  .chicken-stage::after {
+  .chicken-stage {
     animation: none;
   }
 }
