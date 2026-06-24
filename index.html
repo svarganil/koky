@@ -20,15 +20,14 @@
   <body>
     <div class="app-shell">
       <header class="retro-header app-header">
-        <p class="game-kicker">RETRO EGG TIMER</p>
         <h1 class="retro-heading">КОКИ</h1>
-        <p class="retro-paragraph app-tagline">выбери режим и запускай варку</p>
+        <p class="retro-paragraph app-tagline">Выбери режим и запускай варку!</p>
       </header>
 
       <main class="retro-main app-main">
         <section class="app-panel setup-screen" id="setupScreen" aria-labelledby="setupTitle">
           <div class="panel-head">
-            <span class="retro-badge retro-badge--info">START</span>
+            <span class="retro-badge retro-badge--info">СТАРТ</span>
             <h2 class="retro-subheading" id="setupTitle">Настройка яйца</h2>
           </div>
 
@@ -39,9 +38,18 @@
                 <h3>Тип варки</h3>
               </div>
               <div class="choice-grid choice-grid--three" role="radiogroup" aria-label="Тип варки">
-                <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true">Всмятку</button>
-                <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false">В мешочек</button>
-                <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false">Вкрутую</button>
+                <div class="retro-tooltip-container">
+                  <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true" aria-describedby="tooltip-soft">Всмятку</button>
+                  <div class="retro-tooltip" id="tooltip-soft" role="tooltip">Жидкий желток и нежный белок</div>
+                </div>
+                <div class="retro-tooltip-container">
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false" aria-describedby="tooltip-jammy">В мешочек</button>
+                  <div class="retro-tooltip" id="tooltip-jammy" role="tooltip">Мягкий центр, желток уже держит форму</div>
+                </div>
+                <div class="retro-tooltip-container">
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false" aria-describedby="tooltip-hard">Вкрутую</button>
+                  <div class="retro-tooltip" id="tooltip-hard" role="tooltip">Плотный белок и полностью готовый желток</div>
+                </div>
               </div>
             </li>
 
@@ -73,7 +81,6 @@
 
           <div class="start-console" aria-live="polite">
             <div class="time-preview">
-              <span>Время</span>
               <strong id="selectedTime">05:00</strong>
             </div>
             <div class="recipe-preview" id="recipePreview">Комнатная температура / всмятку / СВ</div>
