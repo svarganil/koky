@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>КОКИ</title>
+    <title>Главный по яйцам | КОКИ</title>
     <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
@@ -13,14 +13,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
-    <link rel="icon" href="./assets/peck.gif" type="image/gif">
+    <link rel="icon" href="./assets/gif/peck.gif" type="image/gif">
     <link rel="stylesheet" href="./style.css">
   </head>
 
   <body>
     <div class="app-shell">
       <header class="retro-header app-header">
-        <h1 class="retro-heading">КОКИ</h1>
+        <img class="app-logo" src="./assets/logo.png" alt="КОКИ">
         <p class="retro-paragraph app-tagline">Выбери режим и запускай варку!</p>
       </header>
 
@@ -73,8 +73,8 @@
                 <h3>Температура</h3>
               </div>
               <div class="choice-grid choice-grid--two" role="radiogroup" aria-label="Температура яиц">
-                <button class="retro-button retro-button--constructive choice-button is-selected" type="button" data-group="temperature" data-value="room" aria-pressed="true">Комнатная температура</button>
-                <button class="retro-button retro-button--constructive choice-button" type="button" data-group="temperature" data-value="cold" aria-pressed="false">Из холодильника</button>
+                <button class="retro-button retro-button--constructive choice-button is-selected" type="button" data-group="temperature" data-value="room" aria-pressed="true">Комнатная</button>
+                <button class="retro-button retro-button--constructive choice-button" type="button" data-group="temperature" data-value="cold" aria-pressed="false">Холодильник</button>
               </div>
             </li>
           </ol>
@@ -83,7 +83,7 @@
             <div class="time-preview">
               <strong id="selectedTime">05:00</strong>
             </div>
-            <div class="recipe-preview" id="recipePreview">Комнатная температура / всмятку / СВ</div>
+            <div class="recipe-preview" id="recipePreview">Всмятку / СВ / Комнатная</div>
             <button class="retro-button retro-button--destructive retro-button--large start-button" id="startButton" type="button">Старт</button>
           </div>
         </section>
@@ -91,14 +91,14 @@
         <section class="app-panel timer-screen is-hidden" id="timerScreen" aria-labelledby="timerTitle" aria-live="polite">
           <div class="timer-scene">
             <div class="chicken-stage" aria-label="Игровая сцена">
-              <img class="chicken-gif" id="chickenGif" src="./assets/peck.gif" alt="Курица клюет">
+              <img class="chicken-gif" id="chickenGif" src="./assets/gif/peck.gif" alt="Курица клюет">
             </div>
 
             <div class="timer-console">
               <span class="retro-badge retro-badge--warning" id="timerState">ВАРИМ</span>
               <h2 class="timer-title" id="timerTitle">До готовности</h2>
               <div class="timer-display" id="timerDisplay">05:00</div>
-              <p class="timer-recipe" id="timerRecipe">Комнатная температура / всмятку / СВ</p>
+              <p class="timer-recipe" id="timerRecipe">Всмятку / СВ / Комнатная</p>
 
               <div class="retro-progress-bar timer-progress" aria-label="Прогресс таймера">
                 <div class="retro-progress-bar__inner" id="progressBar"></div>

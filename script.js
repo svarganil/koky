@@ -13,13 +13,13 @@ const DEFAULT_TIMES = {
 
 const LABELS = {
   temperature: {
-    room: "Комнатная температура",
-    cold: "Из холодильника"
+    room: "Комнатная",
+    cold: "Холодильник"
   },
   doneness: {
-    soft: "всмятку",
-    jammy: "в мешочек",
-    hard: "вкрутую"
+    soft: "Всмятку",
+    jammy: "В мешочек",
+    hard: "Вкрутую"
   }
 };
 
@@ -101,7 +101,7 @@ function startTimer(elements) {
 
   elements.setupScreen.classList.add("is-hidden");
   elements.timerScreen.classList.remove("is-hidden");
-  elements.chickenGif.src = "./assets/peck.gif";
+  elements.chickenGif.src = "./assets/gif/peck.gif";
   elements.chickenGif.alt = "Курица клюет";
   elements.timerState.textContent = "ВАРИМ";
   elements.timerTitle.textContent = "До готовности";
@@ -176,7 +176,7 @@ function finishTimer(elements) {
   renderTimer(elements);
   elements.timerState.textContent = "ГОТОВО";
   elements.pauseButton.textContent = "Повторить";
-  elements.chickenGif.src = "./assets/cluck.gif";
+  elements.chickenGif.src = "./assets/gif/cluck.gif";
   elements.chickenGif.alt = "Курица кудахчет";
   showToast(elements);
   playAlarm();
@@ -187,7 +187,7 @@ function getCurrentTime() {
 }
 
 function getRecipeLabel() {
-  return `${LABELS.temperature[state.temperature]} / ${LABELS.doneness[state.doneness]} / ${state.size}`;
+  return `${LABELS.doneness[state.doneness]} / ${state.size} / ${LABELS.temperature[state.temperature]}`;
 }
 
 function parseTime(time) {

@@ -80,6 +80,14 @@ button {
   letter-spacing: 0;
 }
 
+.app-logo {
+  display: block;
+  width: min(420px, 76vw);
+  height: auto;
+  margin: 0 auto 14px;
+  image-rendering: pixelated;
+}
+
 .retro-subheading {
   margin: 0;
   font-size: 20px;
@@ -653,9 +661,8 @@ button {
     padding-top: 20px;
   }
 
-  .retro-heading {
-    font-size: 34px;
-    text-shadow: 3px 3px #000;
+  .app-logo {
+    width: min(280px, 78vw);
   }
 
   .retro-subheading {
