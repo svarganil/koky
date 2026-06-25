@@ -13,21 +13,150 @@ body {
   margin: 0;
   font-family: 'Press Start 2P', cursive;
   color: #000;
+  position: relative;
+  overflow-x: hidden;
   background-color: #00B0EB;
-  background-image:
-    url(https://i.imgur.com/zwZ2RGM.png),
-    url(https://i.imgur.com/zwZ2RGM.png),
-    url(https://i.imgur.com/zwZ2RGM.png);
-  background-position:
-    0 20px,
-    180px 150px,
-    -120px 320px;
-  background-repeat: repeat-x;
-  background-size:
-    480px auto,
-    680px auto,
-    940px auto;
-  animation: clouds-drift 92s linear infinite;
+}
+
+body.theme-morning {
+  background-color: #4AC6FD;
+}
+
+body.theme-evening {
+  background-color: #6B5272;
+}
+
+body.theme-night {
+  background-color: #281B4F;
+}
+
+body::before,
+body::after {
+  content: "";
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+  image-rendering: pixelated;
+}
+
+body.theme-evening::before {
+  display: block;
+  width: 1px;
+  height: 1px;
+  box-shadow:
+    8vw 14vh 0 0 rgba(255, 238, 190, 0.44),
+    17vw 31vh 0 1px rgba(255, 238, 190, 0.36),
+    25vw 11vh 0 2px rgba(255, 249, 217, 0.34),
+    34vw 42vh 0 0 rgba(255, 238, 190, 0.4),
+    48vw 19vh 0 3px rgba(255, 249, 217, 0.32),
+    57vw 36vh 0 1px rgba(255, 238, 190, 0.38),
+    69vw 13vh 0 0 rgba(255, 249, 217, 0.42),
+    82vw 28vh 0 2px rgba(255, 238, 190, 0.34),
+    93vw 47vh 0 1px rgba(255, 249, 217, 0.38),
+    12vw 63vh 0 2px rgba(255, 238, 190, 0.3),
+    41vw 71vh 0 0 rgba(255, 249, 217, 0.36),
+    77vw 66vh 0 3px rgba(255, 238, 190, 0.26);
+  animation: stars-twinkle-soft 5.6s ease-in-out infinite;
+}
+
+body.theme-evening::after {
+  display: block;
+  width: 2px;
+  height: 2px;
+  box-shadow:
+    5vw 51vh 0 1px rgba(255, 223, 181, 0.36),
+    21vw 74vh 0 0 rgba(255, 249, 217, 0.4),
+    31vw 58vh 0 2px rgba(255, 223, 181, 0.3),
+    52vw 79vh 0 1px rgba(255, 249, 217, 0.34),
+    63vw 55vh 0 3px rgba(255, 223, 181, 0.26),
+    89vw 78vh 0 0 rgba(255, 249, 217, 0.38),
+    96vw 59vh 0 2px rgba(255, 223, 181, 0.32),
+    73vw 88vh 0 1px rgba(255, 249, 217, 0.36);
+  animation: stars-twinkle-soft 7.2s ease-in-out infinite reverse;
+}
+
+body.theme-night::before {
+  display: block;
+  width: 1px;
+  height: 1px;
+  box-shadow:
+    3vw 8vh 0 0 rgba(255, 255, 230, 0.78),
+    9vw 24vh 0 1px rgba(255, 255, 230, 0.62),
+    14vw 42vh 0 3px rgba(255, 243, 188, 0.48),
+    19vw 13vh 0 2px rgba(255, 255, 230, 0.58),
+    24vw 67vh 0 0 rgba(255, 255, 230, 0.7),
+    29vw 35vh 0 1px rgba(255, 243, 188, 0.56),
+    33vw 5vh 0 2px rgba(255, 255, 230, 0.62),
+    38vw 82vh 0 3px rgba(255, 243, 188, 0.46),
+    44vw 26vh 0 0 rgba(255, 255, 230, 0.74),
+    49vw 52vh 0 1px rgba(255, 243, 188, 0.58),
+    54vw 17vh 0 3px rgba(255, 255, 230, 0.52),
+    58vw 73vh 0 2px rgba(255, 243, 188, 0.54),
+    63vw 39vh 0 0 rgba(255, 255, 230, 0.7),
+    67vw 9vh 0 1px rgba(255, 243, 188, 0.58),
+    72vw 61vh 0 3px rgba(255, 255, 230, 0.5),
+    78vw 33vh 0 2px rgba(255, 243, 188, 0.56),
+    83vw 14vh 0 0 rgba(255, 255, 230, 0.74),
+    88vw 87vh 0 3px rgba(255, 243, 188, 0.46),
+    94vw 48vh 0 1px rgba(255, 255, 230, 0.66),
+    97vw 21vh 0 2px rgba(255, 243, 188, 0.54),
+    6vw 79vh 0 1px rgba(255, 255, 230, 0.6),
+    16vw 91vh 0 2px rgba(255, 243, 188, 0.52),
+    36vw 95vh 0 0 rgba(255, 255, 230, 0.7),
+    56vw 92vh 0 1px rgba(255, 243, 188, 0.56),
+    76vw 96vh 0 2px rgba(255, 255, 230, 0.58);
+  animation: stars-twinkle 4.8s ease-in-out infinite;
+}
+
+body.theme-night::after {
+  display: block;
+  width: 2px;
+  height: 2px;
+  box-shadow:
+    5vw 55vh 0 2px rgba(222, 236, 255, 0.5),
+    11vw 70vh 0 0 rgba(255, 255, 230, 0.72),
+    18vw 29vh 0 3px rgba(222, 236, 255, 0.42),
+    27vw 88vh 0 1px rgba(255, 255, 230, 0.62),
+    31vw 73vh 0 2px rgba(222, 236, 255, 0.5),
+    42vw 44vh 0 3px rgba(255, 255, 230, 0.44),
+    47vw 9vh 0 0 rgba(222, 236, 255, 0.68),
+    53vw 66vh 0 2px rgba(255, 255, 230, 0.54),
+    61vw 23vh 0 1px rgba(222, 236, 255, 0.6),
+    66vw 84vh 0 3px rgba(255, 255, 230, 0.42),
+    71vw 50vh 0 0 rgba(222, 236, 255, 0.7),
+    79vw 6vh 0 2px rgba(255, 255, 230, 0.52),
+    86vw 64vh 0 1px rgba(222, 236, 255, 0.62),
+    91vw 35vh 0 3px rgba(255, 255, 230, 0.42),
+    98vw 75vh 0 0 rgba(222, 236, 255, 0.68),
+    22vw 4vh 0 1px rgba(255, 255, 230, 0.58),
+    40vw 12vh 0 2px rgba(222, 236, 255, 0.54),
+    60vw 5vh 0 1px rgba(255, 255, 230, 0.6),
+    81vw 92vh 0 2px rgba(222, 236, 255, 0.5);
+  animation: stars-twinkle 6.4s ease-in-out infinite reverse;
+}
+
+.pixel-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  grid-template-columns: repeat(24, 1fr);
+  grid-template-rows: repeat(13, 1fr);
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+body.theme-morning .pixel-sky,
+body.theme-evening .pixel-sky {
+  display: grid;
+}
+
+.sky-pixel {
+  width: 100%;
+  height: 100%;
 }
 
 button,
@@ -40,10 +169,74 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
+.cloud-field {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: none;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body.theme-day .cloud-field {
+  display: block;
+}
+
+.day-cloud {
+  position: absolute;
+  top: var(--cloud-top);
+  left: var(--cloud-start);
+  width: var(--cloud-width);
+  max-width: none;
+  height: auto;
+  image-rendering: pixelated;
+  pointer-events: none;
+  animation: day-cloud-float var(--cloud-duration) linear infinite;
+  animation-delay: var(--cloud-delay);
+}
+
+.theme-switcher {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: repeat(5, 28px);
+  gap: 4px;
+  padding: 4px;
+  border: 4px solid #000;
+  background-color: #fff;
+  box-shadow: 0 4px #cc9900;
+}
+
+.theme-switcher__button {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #000;
+  background-color: #ffcc00;
+  color: #000;
+  cursor: pointer;
+  font-size: 9px;
+  line-height: 1;
+  padding: 0;
+}
+
+.theme-switcher__button:hover,
+.theme-switcher__button:focus {
+  background-color: #ffd700;
+}
+
+.theme-switcher__button.is-selected {
+  background-color: #ff3333;
+  color: #fff;
+}
+
 .app-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 2;
 }
 
 .retro-header,
@@ -399,20 +592,166 @@ button {
   display: flex;
   align-items: end;
   justify-content: center;
+  position: relative;
   border: 4px solid #000;
   background-color: #00B0EB;
-  background-image:
-    url(https://i.imgur.com/zwZ2RGM.png),
-    url(https://i.imgur.com/zwZ2RGM.png);
-  background-position:
-    0 20px,
-    160px 120px;
-  background-repeat: repeat;
-  background-size:
-    360px auto,
-    620px auto;
-  animation: stage-clouds-drift 54s linear infinite;
   overflow: hidden;
+}
+
+.stage-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #00B0EB;
+  overflow: hidden;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.stage-cloud-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: none;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body.theme-day .stage-cloud-field {
+  display: block;
+}
+
+.stage-sky::before,
+.stage-sky::after {
+  content: "";
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.stage-sky .sky-pixel {
+  display: none;
+}
+
+body.theme-morning .stage-sky,
+body.theme-evening .stage-sky {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  grid-template-rows: repeat(13, 1fr);
+  background-image: none;
+  animation: none;
+}
+
+body.theme-morning .stage-sky {
+  background-color: #4AC6FD;
+}
+
+body.theme-evening .stage-sky {
+  background-color: #6B5272;
+}
+
+body.theme-morning .stage-sky .sky-pixel,
+body.theme-evening .stage-sky .sky-pixel {
+  display: block;
+}
+
+body.theme-evening .stage-sky::before {
+  display: block;
+  background-image:
+    linear-gradient(rgba(255, 238, 190, 0.42), rgba(255, 238, 190, 0.42)),
+    linear-gradient(rgba(255, 249, 217, 0.34), rgba(255, 249, 217, 0.34)),
+    linear-gradient(rgba(255, 223, 181, 0.3), rgba(255, 223, 181, 0.3)),
+    linear-gradient(rgba(255, 249, 217, 0.38), rgba(255, 249, 217, 0.38)),
+    linear-gradient(rgba(255, 238, 190, 0.32), rgba(255, 238, 190, 0.32)),
+    linear-gradient(rgba(255, 249, 217, 0.36), rgba(255, 249, 217, 0.36)),
+    linear-gradient(rgba(255, 223, 181, 0.28), rgba(255, 223, 181, 0.28));
+  background-position:
+    12% 18%,
+    31% 28%,
+    48% 14%,
+    68% 36%,
+    85% 22%,
+    22% 63%,
+    74% 71%;
+  background-size:
+    2px 2px,
+    4px 4px,
+    6px 6px,
+    3px 3px,
+    5px 5px,
+    7px 7px,
+    4px 4px;
+  animation: stars-twinkle-soft 5.6s ease-in-out infinite;
+}
+
+body.theme-night .stage-sky {
+  background-color: #281B4F;
+  background-image: none;
+  animation: none;
+}
+
+body.theme-night .stage-sky::before,
+body.theme-night .stage-sky::after {
+  display: block;
+}
+
+body.theme-night .stage-sky::before {
+  background-image:
+    linear-gradient(rgba(255, 255, 230, 0.72), rgba(255, 255, 230, 0.72)),
+    linear-gradient(rgba(222, 236, 255, 0.56), rgba(222, 236, 255, 0.56)),
+    linear-gradient(rgba(255, 243, 188, 0.5), rgba(255, 243, 188, 0.5)),
+    linear-gradient(rgba(255, 255, 230, 0.68), rgba(255, 255, 230, 0.68)),
+    linear-gradient(rgba(222, 236, 255, 0.48), rgba(222, 236, 255, 0.48)),
+    linear-gradient(rgba(255, 243, 188, 0.54), rgba(255, 243, 188, 0.54)),
+    linear-gradient(rgba(255, 255, 230, 0.64), rgba(255, 255, 230, 0.64)),
+    linear-gradient(rgba(222, 236, 255, 0.5), rgba(222, 236, 255, 0.5));
+  background-position:
+    9% 13%,
+    18% 42%,
+    27% 21%,
+    41% 61%,
+    55% 17%,
+    68% 48%,
+    81% 27%,
+    91% 69%;
+  background-size:
+    2px 2px,
+    4px 4px,
+    6px 6px,
+    3px 3px,
+    8px 8px,
+    5px 5px,
+    2px 2px,
+    7px 7px;
+  animation: stars-twinkle 4.8s ease-in-out infinite;
+}
+
+body.theme-night .stage-sky::after {
+  background-image:
+    linear-gradient(rgba(255, 255, 230, 0.62), rgba(255, 255, 230, 0.62)),
+    linear-gradient(rgba(222, 236, 255, 0.5), rgba(222, 236, 255, 0.5)),
+    linear-gradient(rgba(255, 243, 188, 0.46), rgba(255, 243, 188, 0.46)),
+    linear-gradient(rgba(255, 255, 230, 0.58), rgba(255, 255, 230, 0.58)),
+    linear-gradient(rgba(222, 236, 255, 0.54), rgba(222, 236, 255, 0.54)),
+    linear-gradient(rgba(255, 243, 188, 0.48), rgba(255, 243, 188, 0.48));
+  background-position:
+    6% 78%,
+    35% 84%,
+    47% 37%,
+    62% 76%,
+    77% 12%,
+    94% 44%;
+  background-size:
+    4px 4px,
+    2px 2px,
+    7px 7px,
+    5px 5px,
+    3px 3px,
+    8px 8px;
+  animation: stars-twinkle 6.4s ease-in-out infinite reverse;
 }
 
 .chicken-gif {
@@ -420,6 +759,8 @@ button {
   height: auto;
   image-rendering: pixelated;
   display: block;
+  position: relative;
+  z-index: 2;
 }
 
 .timer-console {
@@ -580,31 +921,32 @@ button {
   }
 }
 
-@keyframes clouds-drift {
+@keyframes day-cloud-float {
   from {
-    background-position:
-      0 20px,
-      180px 150px,
-      -120px 320px;
+    left: var(--cloud-start);
   }
   to {
-    background-position:
-      960px 20px,
-      -1360px 150px,
-      1880px 320px;
+    left: var(--cloud-end);
   }
 }
 
-@keyframes stage-clouds-drift {
-  from {
-    background-position:
-      0 20px,
-      160px 120px;
+@keyframes stars-twinkle {
+  0%,
+  100% {
+    opacity: 0.6;
   }
-  to {
-    background-position:
-      720px 20px,
-      -1240px 120px;
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes stars-twinkle-soft {
+  0%,
+  100% {
+    opacity: 0.34;
+  }
+  50% {
+    opacity: 0.64;
   }
 }
 
@@ -650,11 +992,21 @@ button {
 }
 
 @media (max-width: 560px) {
-  body {
-    background-size:
-      480px auto,
-      680px auto,
-      940px auto;
+  .theme-switcher {
+    top: 8px;
+    right: 8px;
+    grid-template-columns: repeat(5, 24px);
+    gap: 3px;
+    padding: 3px;
+    border-width: 3px;
+    box-shadow: 0 3px #cc9900;
+  }
+
+  .theme-switcher__button {
+    width: 24px;
+    height: 24px;
+    border-width: 3px;
+    font-size: 8px;
   }
 
   .retro-header {
@@ -710,6 +1062,12 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   body,
+  body::before,
+  body::after,
+  .stage-sky,
+  .stage-sky::before,
+  .stage-sky::after,
+  .day-cloud,
   .chicken-stage {
     animation: none;
   }

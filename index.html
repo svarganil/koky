@@ -18,6 +18,16 @@
   </head>
 
   <body>
+    <div class="cloud-field" id="cloudField" aria-hidden="true"></div>
+
+    <div class="theme-switcher" aria-label="Проверка времени суток">
+      <button class="theme-switcher__button is-selected" type="button" data-theme-toggle="auto" aria-pressed="true" title="Авто">А</button>
+      <button class="theme-switcher__button" type="button" data-theme-toggle="morning" aria-pressed="false" title="Утро">У</button>
+      <button class="theme-switcher__button" type="button" data-theme-toggle="day" aria-pressed="false" title="День">Д</button>
+      <button class="theme-switcher__button" type="button" data-theme-toggle="evening" aria-pressed="false" title="Вечер">В</button>
+      <button class="theme-switcher__button" type="button" data-theme-toggle="night" aria-pressed="false" title="Ночь">Н</button>
+    </div>
+
     <div class="app-shell">
       <header class="retro-header app-header">
         <img class="app-logo" src="./assets/logo.png" alt="КОКИ">
@@ -91,6 +101,8 @@
         <section class="app-panel timer-screen is-hidden" id="timerScreen" aria-labelledby="timerTitle" aria-live="polite">
           <div class="timer-scene">
             <div class="chicken-stage" aria-label="Игровая сцена">
+              <div class="stage-sky" id="stageSky" aria-hidden="true"></div>
+              <div class="stage-cloud-field" id="stageCloudField" aria-hidden="true"></div>
               <img class="chicken-gif" id="chickenGif" src="./assets/gif/peck.gif" alt="Курица клюет">
             </div>
 

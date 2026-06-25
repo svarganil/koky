@@ -1,5 +1,5 @@
 {
-  "name": "КОКИ",
+  "name": "Главный по яйцам | КОКИ",
   "short_name": "КОКИ",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#02B1EB",
-  "background_color": "#02B1EB",
+  "theme_color": "1D1717",
+  "background_color": "1D1717",
   "display": "standalone"
 }
