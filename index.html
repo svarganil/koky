@@ -26,106 +26,165 @@
     <div class="night-star-field" id="nightStarField" aria-hidden="true"></div>
     <div class="status-veil" aria-hidden="true"></div>
 
-    <div class="theme-switcher" aria-label="Проверка времени суток">
-      <button class="theme-switcher__button is-selected" type="button" data-theme-toggle="auto" aria-pressed="true" title="Авто">А</button>
-      <button class="theme-switcher__button" type="button" data-theme-toggle="morning" aria-pressed="false" title="Утро">У</button>
-      <button class="theme-switcher__button" type="button" data-theme-toggle="day" aria-pressed="false" title="День">Д</button>
-      <button class="theme-switcher__button" type="button" data-theme-toggle="evening" aria-pressed="false" title="Вечер">В</button>
-      <button class="theme-switcher__button" type="button" data-theme-toggle="night" aria-pressed="false" title="Ночь">Н</button>
-    </div>
-
     <div class="app-shell">
       <header class="retro-header app-header">
-        <img class="app-logo" src="./assets/logo.png" alt="КОКИ">
+        <div class="header-inner">
+          <img class="app-logo" src="./assets/logo.png" alt="КОКИ">
+        </div>
       </header>
 
       <main class="retro-main app-main">
-        <section class="app-panel setup-screen" id="setupScreen" aria-labelledby="setupTitle">
+        <section class="site-section site-section--timer" id="timerView" data-section-panel="timer">
+          <section class="app-panel setup-screen" id="setupScreen" aria-labelledby="setupTitle">
+            <div class="panel-head">
+              <h2 class="retro-subheading" id="setupTitle">Настройка яйца</h2>
+              <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
+                <span class="menu-toggle__line" aria-hidden="true"></span>
+                <span class="menu-toggle__line" aria-hidden="true"></span>
+                <span class="menu-toggle__line" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <ol class="setup-steps">
+              <li class="setup-step">
+                <div class="step-title">
+                  <span class="step-number">1</span>
+                  <h3>Тип варки</h3>
+                </div>
+                <div class="choice-grid choice-grid--three" role="radiogroup" aria-label="Тип варки">
+                  <div class="retro-tooltip-container">
+                    <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true" aria-describedby="tooltip-soft">Всмятку</button>
+                    <div class="retro-tooltip" id="tooltip-soft" role="tooltip">Жидкий желток и нежный белок</div>
+                  </div>
+                  <div class="retro-tooltip-container">
+                    <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false" aria-describedby="tooltip-jammy">В мешочек</button>
+                    <div class="retro-tooltip" id="tooltip-jammy" role="tooltip">Мягкий центр, желток уже держит форму</div>
+                  </div>
+                  <div class="retro-tooltip-container">
+                    <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false" aria-describedby="tooltip-hard">Вкрутую</button>
+                    <div class="retro-tooltip" id="tooltip-hard" role="tooltip">Плотный белок и полностью готовый желток</div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="setup-step">
+                <div class="step-title">
+                  <span class="step-number">2</span>
+                  <h3>Размер яйца</h3>
+                </div>
+                <div class="choice-grid choice-grid--five" role="radiogroup" aria-label="Размер яйца">
+                  <button class="retro-button retro-button--secondary choice-button is-selected" type="button" data-group="size" data-value="СВ" aria-pressed="true">СВ</button>
+                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С0" aria-pressed="false">С0</button>
+                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С1" aria-pressed="false">С1</button>
+                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С2" aria-pressed="false">С2</button>
+                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С3" aria-pressed="false">С3</button>
+                </div>
+              </li>
+
+              <li class="setup-step">
+                <div class="step-title">
+                  <span class="step-number">3</span>
+                  <h3>Температура</h3>
+                </div>
+                <div class="choice-grid choice-grid--two" role="radiogroup" aria-label="Температура яиц">
+                  <button class="retro-button retro-button--constructive choice-button is-selected" type="button" data-group="temperature" data-value="room" aria-pressed="true">Комнатная</button>
+                  <button class="retro-button retro-button--constructive choice-button" type="button" data-group="temperature" data-value="cold" aria-pressed="false">Холодильник</button>
+                </div>
+              </li>
+            </ol>
+
+            <div class="start-console" aria-live="polite">
+              <div class="time-preview">
+                <strong id="selectedTime">05:00</strong>
+              </div>
+              <div class="recipe-preview" id="recipePreview">Всмятку / СВ / Комнатная</div>
+              <button class="retro-button retro-button--destructive retro-button--large start-button" id="startButton" type="button">Старт</button>
+            </div>
+          </section>
+
+          <section class="app-panel timer-screen is-hidden" id="timerScreen" aria-labelledby="timerTitle" aria-live="polite">
+            <div class="panel-head">
+              <h2 class="retro-subheading">Таймер варки</h2>
+              <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
+                <span class="menu-toggle__line" aria-hidden="true"></span>
+                <span class="menu-toggle__line" aria-hidden="true"></span>
+                <span class="menu-toggle__line" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <div class="timer-scene">
+              <div class="chicken-stage" aria-label="Игровая сцена">
+                <div class="stage-sky" id="stageSky" aria-hidden="true"></div>
+                <div class="stage-cloud-field" id="stageCloudField" aria-hidden="true"></div>
+                <div class="stage-night-star-field" id="stageNightStarField" aria-hidden="true"></div>
+                <img class="chicken-gif" id="chickenGif" src="./assets/gif/peck.gif" alt="Курица клюет">
+              </div>
+
+              <div class="timer-console">
+                <span class="retro-badge retro-badge--warning" id="timerState">ВАРИМ</span>
+                <h2 class="timer-title" id="timerTitle">До готовности</h2>
+                <div class="timer-display" id="timerDisplay">05:00</div>
+                <p class="timer-recipe" id="timerRecipe">Всмятку / СВ / Комнатная</p>
+
+                <div class="retro-progress-bar timer-progress" aria-label="Прогресс таймера">
+                  <div class="retro-progress-bar__inner" id="progressBar"></div>
+                </div>
+
+                <div class="timer-actions">
+                  <button class="retro-button retro-button--secondary retro-button--medium" id="pauseButton" type="button">Пауза</button>
+                  <button class="retro-button retro-button--ghost retro-button--medium" id="resetButton" type="button">Сначала</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="app-panel site-menu-panel is-hidden" id="siteMenuView" aria-labelledby="siteMenuTitle">
           <div class="panel-head">
-            <h2 class="retro-subheading" id="setupTitle">Настройка яйца</h2>
+            <h2 class="retro-subheading" id="siteMenuTitle">Меню</h2>
+            <button class="menu-toggle" type="button" data-menu-toggle aria-label="Закрыть меню" aria-controls="siteMenuView" aria-expanded="true">
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+            </button>
           </div>
 
-          <ol class="setup-steps">
-            <li class="setup-step">
-              <div class="step-title">
-                <span class="step-number">1</span>
-                <h3>Тип варки</h3>
-              </div>
-              <div class="choice-grid choice-grid--three" role="radiogroup" aria-label="Тип варки">
-                <div class="retro-tooltip-container">
-                  <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true" aria-describedby="tooltip-soft">Всмятку</button>
-                  <div class="retro-tooltip" id="tooltip-soft" role="tooltip">Жидкий желток и нежный белок</div>
-                </div>
-                <div class="retro-tooltip-container">
-                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false" aria-describedby="tooltip-jammy">В мешочек</button>
-                  <div class="retro-tooltip" id="tooltip-jammy" role="tooltip">Мягкий центр, желток уже держит форму</div>
-                </div>
-                <div class="retro-tooltip-container">
-                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false" aria-describedby="tooltip-hard">Вкрутую</button>
-                  <div class="retro-tooltip" id="tooltip-hard" role="tooltip">Плотный белок и полностью готовый желток</div>
-                </div>
-              </div>
-            </li>
-
-            <li class="setup-step">
-              <div class="step-title">
-                <span class="step-number">2</span>
-                <h3>Размер яйца</h3>
-              </div>
-              <div class="choice-grid choice-grid--five" role="radiogroup" aria-label="Размер яйца">
-                <button class="retro-button retro-button--secondary choice-button is-selected" type="button" data-group="size" data-value="СВ" aria-pressed="true">СВ</button>
-                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С0" aria-pressed="false">С0</button>
-                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С1" aria-pressed="false">С1</button>
-                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С2" aria-pressed="false">С2</button>
-                <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С3" aria-pressed="false">С3</button>
-              </div>
-            </li>
-
-            <li class="setup-step">
-              <div class="step-title">
-                <span class="step-number">3</span>
-                <h3>Температура</h3>
-              </div>
-              <div class="choice-grid choice-grid--two" role="radiogroup" aria-label="Температура яиц">
-                <button class="retro-button retro-button--constructive choice-button is-selected" type="button" data-group="temperature" data-value="room" aria-pressed="true">Комнатная</button>
-                <button class="retro-button retro-button--constructive choice-button" type="button" data-group="temperature" data-value="cold" aria-pressed="false">Холодильник</button>
-              </div>
-            </li>
-          </ol>
-
-          <div class="start-console" aria-live="polite">
-            <div class="time-preview">
-              <strong id="selectedTime">05:00</strong>
+          <nav class="site-menu" aria-label="Разделы сайта">
+            <button class="site-menu__item is-active" type="button" data-section-target="timer" aria-current="page">Таймер варки</button>
+            <button class="site-menu__item" type="button" data-section-target="recipes">Рецепты</button>
+            <button class="site-menu__item" type="button" data-section-target="faq">FAQ</button>
+            <div class="site-menu__meta">
+              <span>Версия 0.1</span>
+              <span>© <span id="menuYear">2026</span> <a href="https://svarganil.ru" target="_blank" rel="noopener noreferrer">Сварганил</a></span>
             </div>
-            <div class="recipe-preview" id="recipePreview">Всмятку / СВ / Комнатная</div>
-            <button class="retro-button retro-button--destructive retro-button--large start-button" id="startButton" type="button">Старт</button>
+          </nav>
+        </section>
+
+        <section class="app-panel page-placeholder site-section is-hidden" id="recipesView" data-section-panel="recipes" aria-labelledby="recipesTitle">
+          <div class="panel-head">
+            <h2 class="retro-subheading" id="recipesTitle">Рецепты</h2>
+            <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="placeholder-box">
+            <p>Раздел скоро появится.</p>
           </div>
         </section>
 
-        <section class="app-panel timer-screen is-hidden" id="timerScreen" aria-labelledby="timerTitle" aria-live="polite">
-          <div class="timer-scene">
-            <div class="chicken-stage" aria-label="Игровая сцена">
-              <div class="stage-sky" id="stageSky" aria-hidden="true"></div>
-              <div class="stage-cloud-field" id="stageCloudField" aria-hidden="true"></div>
-              <div class="stage-night-star-field" id="stageNightStarField" aria-hidden="true"></div>
-              <img class="chicken-gif" id="chickenGif" src="./assets/gif/peck.gif" alt="Курица клюет">
-            </div>
-
-            <div class="timer-console">
-              <span class="retro-badge retro-badge--warning" id="timerState">ВАРИМ</span>
-              <h2 class="timer-title" id="timerTitle">До готовности</h2>
-              <div class="timer-display" id="timerDisplay">05:00</div>
-              <p class="timer-recipe" id="timerRecipe">Всмятку / СВ / Комнатная</p>
-
-              <div class="retro-progress-bar timer-progress" aria-label="Прогресс таймера">
-                <div class="retro-progress-bar__inner" id="progressBar"></div>
-              </div>
-
-              <div class="timer-actions">
-                <button class="retro-button retro-button--secondary retro-button--medium" id="pauseButton" type="button">Пауза</button>
-                <button class="retro-button retro-button--ghost retro-button--medium" id="resetButton" type="button">Сначала</button>
-              </div>
-            </div>
+        <section class="app-panel page-placeholder site-section is-hidden" id="faqView" data-section-panel="faq" aria-labelledby="faqTitle">
+          <div class="panel-head">
+            <h2 class="retro-subheading" id="faqTitle">FAQ</h2>
+            <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__line" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="placeholder-box">
+            <p>Раздел скоро появится.</p>
           </div>
         </section>
       </main>

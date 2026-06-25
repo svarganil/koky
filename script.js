@@ -23,6 +23,9 @@ const LABELS = {
   }
 };
 
+const SITE_SECTIONS = ["timer", "recipes", "faq"];
+const ALARM_AUDIO_SRC = "./assets/cluck.mp3";
+
 const SKY_GRID = {
   targetColumns: 24,
   minCellSize: 28,
@@ -124,8 +127,7 @@ const state = {
   endAt: 0,
   running: false,
   finished: false,
-  audioContext: null,
-  alarmId: null
+  alarmAudio: null
 };
 
 let currentTheme = "";
@@ -135,10 +137,12 @@ let cloudFieldElement = null;
 let stageCloudFieldElement = null;
 let nightStarFieldElement = null;
 let stageNightStarFieldElement = null;
-let themeOverride = null;
+let activeSiteSection = "timer";
 
 document.addEventListener("DOMContentLoaded", () => {
   setupTimeTheme();
+  bindSiteMenu();
+  updateMenuYear();
 
   const elements = {
     setupScreen: document.getElementById("setupScreen"),
@@ -171,19 +175,133 @@ document.addEventListener("DOMContentLoaded", () => {
   updatePreview(elements);
 });
 
+function updateMenuYear() {
+  const yearElement = document.getElementById("menuYear");
+
+  if (yearElement) {
+    yearElement.textContent = String(new Date().getFullYear());
+  }
+}
+
+function bindSiteMenu() {
+  const menuToggles = document.querySelectorAll("[data-menu-toggle]");
+  const menuPanel = document.getElementById("siteMenuView");
+  const menuItems = document.querySelectorAll("[data-section-target]");
+
+  if (!menuPanel || menuItems.length === 0) {
+    return;
+  }
+
+  activeSiteSection = getInitialSiteSection();
+  switchSiteSection(activeSiteSection, { updateHash: false });
+
+  menuToggles.forEach((button) => {
+    button.addEventListener("click", () => {
+      setSiteMenuOpen(!isSiteMenuOpen());
+    });
+  });
+
+  menuItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      switchSiteSection(item.dataset.sectionTarget);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isSiteMenuOpen()) {
+      setSiteMenuOpen(false);
+    }
+  });
+
+  window.addEventListener("hashchange", () => {
+    const section = getValidSiteSection(window.location.hash.slice(1));
+
+    if (section) {
+      switchSiteSection(section, { updateHash: false });
+    }
+  });
+}
+
+function getInitialSiteSection() {
+  return getValidSiteSection(window.location.hash.slice(1)) || "timer";
+}
+
+function getValidSiteSection(section) {
+  return SITE_SECTIONS.includes(section) ? section : null;
+}
+
+function isSiteMenuOpen() {
+  const menuPanel = document.getElementById("siteMenuView");
+
+  return Boolean(menuPanel && !menuPanel.classList.contains("is-hidden"));
+}
+
+function setSiteMenuOpen(isOpen) {
+  const menuPanel = document.getElementById("siteMenuView");
+
+  if (!menuPanel) {
+    return;
+  }
+
+  document.querySelectorAll("[data-section-panel]").forEach((panel) => {
+    panel.classList.toggle("is-hidden", isOpen || panel.dataset.sectionPanel !== activeSiteSection);
+  });
+
+  menuPanel.classList.toggle("is-hidden", !isOpen);
+  updateMenuToggleState(isOpen);
+}
+
+function updateMenuToggleState(isOpen) {
+  document.querySelectorAll("[data-menu-toggle]").forEach((button) => {
+    button.setAttribute("aria-expanded", String(isOpen));
+    button.setAttribute("aria-label", isOpen ? "Закрыть меню" : "Открыть меню");
+  });
+}
+
+function switchSiteSection(section, options = {}) {
+  const nextSection = getValidSiteSection(section) || "timer";
+  const menuPanel = document.getElementById("siteMenuView");
+
+  activeSiteSection = nextSection;
+
+  document.querySelectorAll("[data-section-panel]").forEach((panel) => {
+    panel.classList.toggle("is-hidden", panel.dataset.sectionPanel !== nextSection);
+  });
+
+  if (menuPanel) {
+    menuPanel.classList.add("is-hidden");
+  }
+
+  document.querySelectorAll("[data-section-target]").forEach((item) => {
+    const isActive = item.dataset.sectionTarget === nextSection;
+    item.classList.toggle("is-active", isActive);
+
+    if (isActive) {
+      item.setAttribute("aria-current", "page");
+    } else {
+      item.removeAttribute("aria-current");
+    }
+  });
+
+  if (options.updateHash !== false && window.location.hash !== `#${nextSection}`) {
+    window.location.hash = nextSection;
+  }
+
+  updateMenuToggleState(false);
+}
+
 function setupTimeTheme() {
   ensurePixelSky();
   ensureStageSky();
   ensureDayClouds();
   ensureNightStars();
-  bindThemeSwitcher();
   applyTimeTheme();
   window.setInterval(applyTimeTheme, 60000);
   window.addEventListener("resize", () => renderPixelSky(currentTheme));
 }
 
 function applyTimeTheme(date = new Date()) {
-  const theme = themeOverride || getTimeTheme(date);
+  const theme = getTimeTheme(date);
 
   document.body.classList.remove("theme-morning", "theme-day", "theme-evening", "theme-night");
   document.body.classList.add(`theme-${theme}`);
@@ -193,8 +311,6 @@ function applyTimeTheme(date = new Date()) {
     renderPixelSky(theme);
     currentTheme = theme;
   }
-
-  updateThemeSwitcherState();
 }
 
 function updateThemeChrome(theme) {
@@ -206,27 +322,6 @@ function updateThemeChrome(theme) {
   if (themeColorMeta) {
     themeColorMeta.setAttribute("content", color);
   }
-}
-
-function bindThemeSwitcher() {
-  document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const value = button.dataset.themeToggle;
-      themeOverride = value === "auto" ? null : value;
-      currentTheme = "";
-      applyTimeTheme();
-    });
-  });
-}
-
-function updateThemeSwitcherState() {
-  const activeValue = themeOverride || "auto";
-
-  document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-    const isSelected = button.dataset.themeToggle === activeValue;
-    button.classList.toggle("is-selected", isSelected);
-    button.setAttribute("aria-pressed", String(isSelected));
-  });
 }
 
 function getTimeTheme(date) {
@@ -472,7 +567,7 @@ function updatePreview(elements) {
 
 function startTimer(elements) {
   stopAlarm(elements);
-  initAudio();
+  prepareAlarmSound();
 
   state.totalSeconds = parseTime(getCurrentTime());
   state.remainingSeconds = state.totalSeconds;
@@ -583,47 +678,55 @@ function formatClock(totalSeconds) {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-function initAudio() {
-  const AudioConstructor = window.AudioContext || window.webkitAudioContext;
+function getAlarmAudio() {
+  if (!state.alarmAudio) {
+    state.alarmAudio = new Audio(ALARM_AUDIO_SRC);
+    state.alarmAudio.preload = "auto";
+  }
 
-  if (state.audioContext || !AudioConstructor) {
+  return state.alarmAudio;
+}
+
+function prepareAlarmSound() {
+  const audio = getAlarmAudio();
+  const previousVolume = audio.volume || 1;
+
+  audio.pause();
+  audio.currentTime = 0;
+  audio.volume = 0;
+
+  const playPromise = audio.play();
+
+  if (!playPromise) {
+    audio.volume = previousVolume;
+    audio.load();
     return;
   }
 
-  state.audioContext = new AudioConstructor();
-  state.audioContext.resume();
+  playPromise
+    .then(() => {
+      audio.pause();
+      audio.currentTime = 0;
+      audio.volume = previousVolume;
+    })
+    .catch(() => {
+      audio.volume = previousVolume;
+      audio.load();
+    });
 }
 
 function playAlarm() {
-  let beeps = 0;
-  beep();
-  state.alarmId = window.setInterval(() => {
-    beeps += 1;
-    if (beeps >= 5) {
-      window.clearInterval(state.alarmId);
-      state.alarmId = null;
-      return;
-    }
-    beep();
-  }, 450);
-}
+  const audio = getAlarmAudio();
 
-function beep() {
-  const audioContext = state.audioContext;
-  if (!audioContext) {
-    return;
+  audio.pause();
+  audio.currentTime = 0;
+  audio.volume = 1;
+
+  const playPromise = audio.play();
+
+  if (playPromise) {
+    playPromise.catch(() => {});
   }
-
-  const oscillator = audioContext.createOscillator();
-  const gain = audioContext.createGain();
-  oscillator.type = "square";
-  oscillator.frequency.setValueAtTime(620, audioContext.currentTime);
-  gain.gain.setValueAtTime(0.08, audioContext.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.18);
-  oscillator.connect(gain);
-  gain.connect(audioContext.destination);
-  oscillator.start();
-  oscillator.stop(audioContext.currentTime + 0.18);
 }
 
 function showToast(elements) {
@@ -632,9 +735,9 @@ function showToast(elements) {
 }
 
 function stopAlarm(elements) {
-  if (state.alarmId) {
-    window.clearInterval(state.alarmId);
-    state.alarmId = null;
+  if (state.alarmAudio) {
+    state.alarmAudio.pause();
+    state.alarmAudio.currentTime = 0;
   }
 
   if (elements) {
