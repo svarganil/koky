@@ -2,8 +2,12 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Главный по яйцам | КОКИ</title>
+    <meta name="theme-color" id="themeColorMeta" content="#00B0EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
@@ -19,6 +23,8 @@
 
   <body>
     <div class="cloud-field" id="cloudField" aria-hidden="true"></div>
+    <div class="night-star-field" id="nightStarField" aria-hidden="true"></div>
+    <div class="status-veil" aria-hidden="true"></div>
 
     <div class="theme-switcher" aria-label="Проверка времени суток">
       <button class="theme-switcher__button is-selected" type="button" data-theme-toggle="auto" aria-pressed="true" title="Авто">А</button>
@@ -31,13 +37,11 @@
     <div class="app-shell">
       <header class="retro-header app-header">
         <img class="app-logo" src="./assets/logo.png" alt="КОКИ">
-        <p class="retro-paragraph app-tagline">Выбери режим и запускай варку!</p>
       </header>
 
       <main class="retro-main app-main">
         <section class="app-panel setup-screen" id="setupScreen" aria-labelledby="setupTitle">
           <div class="panel-head">
-            <span class="retro-badge retro-badge--info">СТАРТ</span>
             <h2 class="retro-subheading" id="setupTitle">Настройка яйца</h2>
           </div>
 
@@ -103,6 +107,7 @@
             <div class="chicken-stage" aria-label="Игровая сцена">
               <div class="stage-sky" id="stageSky" aria-hidden="true"></div>
               <div class="stage-cloud-field" id="stageCloudField" aria-hidden="true"></div>
+              <div class="stage-night-star-field" id="stageNightStarField" aria-hidden="true"></div>
               <img class="chicken-gif" id="chickenGif" src="./assets/gif/peck.gif" alt="Курица клюет">
             </div>
 

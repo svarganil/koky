@@ -6,10 +6,12 @@
 
 html {
   min-height: 100%;
+  background-color: #00B0EB;
 }
 
 body {
   min-height: 100%;
+  min-height: 100dvh;
   margin: 0;
   font-family: 'Press Start 2P', cursive;
   color: #000;
@@ -28,6 +30,50 @@ body.theme-evening {
 
 body.theme-night {
   background-color: #281B4F;
+}
+
+.status-veil {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(env(safe-area-inset-top, 0px) + 54px);
+  z-index: 7;
+  display: none;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 176, 235, 0.68) 0%,
+    rgba(0, 176, 235, 0.28) 58%,
+    rgba(0, 176, 235, 0) 100%
+  );
+}
+
+body.theme-morning .status-veil {
+  background: linear-gradient(
+    to bottom,
+    rgba(74, 198, 253, 0.7) 0%,
+    rgba(74, 198, 253, 0.3) 58%,
+    rgba(74, 198, 253, 0) 100%
+  );
+}
+
+body.theme-evening .status-veil {
+  background: linear-gradient(
+    to bottom,
+    rgba(107, 82, 114, 0.74) 0%,
+    rgba(107, 82, 114, 0.34) 58%,
+    rgba(107, 82, 114, 0) 100%
+  );
+}
+
+body.theme-night .status-veil {
+  background: linear-gradient(
+    to bottom,
+    rgba(40, 27, 79, 0.76) 0%,
+    rgba(40, 27, 79, 0.36) 58%,
+    rgba(40, 27, 79, 0) 100%
+  );
 }
 
 body::before,
@@ -58,7 +104,18 @@ body.theme-evening::before {
     93vw 47vh 0 1px rgba(255, 249, 217, 0.38),
     12vw 63vh 0 2px rgba(255, 238, 190, 0.3),
     41vw 71vh 0 0 rgba(255, 249, 217, 0.36),
-    77vw 66vh 0 3px rgba(255, 238, 190, 0.26);
+    77vw 66vh 0 3px rgba(255, 238, 190, 0.26),
+    4vw 37vh 0 0 rgba(255, 249, 217, 0.34),
+    28vw 52vh 0 1px rgba(255, 238, 190, 0.32),
+    38vw 9vh 0 0 rgba(255, 249, 217, 0.38),
+    62vw 57vh 0 2px rgba(255, 238, 190, 0.28),
+    71vw 41vh 0 1px rgba(255, 249, 217, 0.34),
+    88vw 12vh 0 0 rgba(255, 238, 190, 0.36),
+    98vw 34vh 0 1px rgba(255, 249, 217, 0.32),
+    19vw 48vh 0 0 rgba(255, 238, 190, 0.34),
+    53vw 7vh 0 1px rgba(255, 249, 217, 0.3),
+    79vw 49vh 0 0 rgba(255, 238, 190, 0.32),
+    91vw 39vh 0 2px rgba(255, 249, 217, 0.28);
   animation: stars-twinkle-soft 5.6s ease-in-out infinite;
 }
 
@@ -74,12 +131,20 @@ body.theme-evening::after {
     63vw 55vh 0 3px rgba(255, 223, 181, 0.26),
     89vw 78vh 0 0 rgba(255, 249, 217, 0.38),
     96vw 59vh 0 2px rgba(255, 223, 181, 0.32),
-    73vw 88vh 0 1px rgba(255, 249, 217, 0.36);
+    73vw 88vh 0 1px rgba(255, 249, 217, 0.36),
+    14vw 86vh 0 0 rgba(255, 223, 181, 0.32),
+    36vw 91vh 0 2px rgba(255, 249, 217, 0.28),
+    47vw 64vh 0 1px rgba(255, 223, 181, 0.34),
+    68vw 73vh 0 0 rgba(255, 249, 217, 0.36),
+    83vw 53vh 0 2px rgba(255, 223, 181, 0.3),
+    26vw 68vh 0 0 rgba(255, 249, 217, 0.34),
+    58vw 88vh 0 1px rgba(255, 223, 181, 0.32),
+    94vw 82vh 0 0 rgba(255, 249, 217, 0.34);
   animation: stars-twinkle-soft 7.2s ease-in-out infinite reverse;
 }
 
 body.theme-night::before {
-  display: block;
+  display: none;
   width: 1px;
   height: 1px;
   box-shadow:
@@ -112,7 +177,7 @@ body.theme-night::before {
 }
 
 body.theme-night::after {
-  display: block;
+  display: none;
   width: 2px;
   height: 2px;
   box-shadow:
@@ -143,8 +208,7 @@ body.theme-night::after {
   inset: 0;
   z-index: 0;
   display: none;
-  grid-template-columns: repeat(24, 1fr);
-  grid-template-rows: repeat(13, 1fr);
+  overflow: hidden;
   pointer-events: none;
   image-rendering: pixelated;
 }
@@ -180,6 +244,33 @@ button {
 
 body.theme-day .cloud-field {
   display: block;
+}
+
+.night-star-field {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: none;
+  overflow: hidden;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+body.theme-night .night-star-field {
+  display: block;
+}
+
+.night-star {
+  position: absolute;
+  top: var(--star-top);
+  left: var(--star-left);
+  width: var(--star-size);
+  height: var(--star-size);
+  background-color: var(--star-color);
+  opacity: 1;
+  pointer-events: none;
+  animation: night-star-twinkle var(--star-duration) linear infinite;
+  animation-delay: var(--star-delay);
 }
 
 .day-cloud {
@@ -303,11 +394,6 @@ body.theme-day .cloud-field {
   line-height: 1.6;
   color: #fff;
   text-shadow: 2px 2px #000;
-}
-
-.app-tagline {
-  max-width: 680px;
-  margin: 0 auto;
 }
 
 .app-panel {
@@ -621,6 +707,20 @@ body.theme-day .stage-cloud-field {
   display: block;
 }
 
+.stage-night-star-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: none;
+  overflow: hidden;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+body.theme-night .stage-night-star-field {
+  display: block;
+}
+
 .stage-sky::before,
 .stage-sky::after {
   content: "";
@@ -639,8 +739,6 @@ body.theme-day .stage-cloud-field {
 body.theme-morning .stage-sky,
 body.theme-evening .stage-sky {
   display: grid;
-  grid-template-columns: repeat(24, 1fr);
-  grid-template-rows: repeat(13, 1fr);
   background-image: none;
   animation: none;
 }
@@ -667,7 +765,12 @@ body.theme-evening .stage-sky::before {
     linear-gradient(rgba(255, 249, 217, 0.38), rgba(255, 249, 217, 0.38)),
     linear-gradient(rgba(255, 238, 190, 0.32), rgba(255, 238, 190, 0.32)),
     linear-gradient(rgba(255, 249, 217, 0.36), rgba(255, 249, 217, 0.36)),
-    linear-gradient(rgba(255, 223, 181, 0.28), rgba(255, 223, 181, 0.28));
+    linear-gradient(rgba(255, 223, 181, 0.28), rgba(255, 223, 181, 0.28)),
+    linear-gradient(rgba(255, 249, 217, 0.34), rgba(255, 249, 217, 0.34)),
+    linear-gradient(rgba(255, 238, 190, 0.3), rgba(255, 238, 190, 0.3)),
+    linear-gradient(rgba(255, 249, 217, 0.32), rgba(255, 249, 217, 0.32)),
+    linear-gradient(rgba(255, 238, 190, 0.32), rgba(255, 238, 190, 0.32)),
+    linear-gradient(rgba(255, 249, 217, 0.3), rgba(255, 249, 217, 0.3));
   background-position:
     12% 18%,
     31% 28%,
@@ -675,7 +778,12 @@ body.theme-evening .stage-sky::before {
     68% 36%,
     85% 22%,
     22% 63%,
-    74% 71%;
+    74% 71%,
+    9% 44%,
+    54% 66%,
+    91% 54%,
+    37% 52%,
+    82% 39%;
   background-size:
     2px 2px,
     4px 4px,
@@ -683,7 +791,12 @@ body.theme-evening .stage-sky::before {
     3px 3px,
     5px 5px,
     7px 7px,
-    4px 4px;
+    4px 4px,
+    3px 3px,
+    5px 5px,
+    2px 2px,
+    4px 4px,
+    3px 3px;
   animation: stars-twinkle-soft 5.6s ease-in-out infinite;
 }
 
@@ -695,7 +808,7 @@ body.theme-night .stage-sky {
 
 body.theme-night .stage-sky::before,
 body.theme-night .stage-sky::after {
-  display: block;
+  display: none;
 }
 
 body.theme-night .stage-sky::before {
@@ -950,6 +1063,16 @@ body.theme-night .stage-sky::after {
   }
 }
 
+@keyframes night-star-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
 @media (max-width: 860px) {
   .app-main {
     padding: 10px 12px 24px;
@@ -992,8 +1115,12 @@ body.theme-night .stage-sky::after {
 }
 
 @media (max-width: 560px) {
+  .status-veil {
+    display: block;
+  }
+
   .theme-switcher {
-    top: 8px;
+    top: max(8px, calc(env(safe-area-inset-top, 0px) + 8px));
     right: 8px;
     grid-template-columns: repeat(5, 24px);
     gap: 3px;
@@ -1010,7 +1137,7 @@ body.theme-night .stage-sky::after {
   }
 
   .retro-header {
-    padding-top: 20px;
+    padding-top: max(20px, calc(env(safe-area-inset-top, 0px) + 14px));
   }
 
   .app-logo {
@@ -1060,6 +1187,20 @@ body.theme-night .stage-sky::after {
   }
 }
 
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  .status-veil {
+    display: block;
+  }
+
+  .theme-switcher {
+    top: max(12px, calc(env(safe-area-inset-top, 0px) + 8px));
+  }
+
+  .retro-header {
+    padding-top: max(28px, calc(env(safe-area-inset-top, 0px) + 14px));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   body,
   body::before,
@@ -1068,6 +1209,7 @@ body.theme-night .stage-sky::after {
   .stage-sky::before,
   .stage-sky::after,
   .day-cloud,
+  .night-star,
   .chicken-stage {
     animation: none;
   }

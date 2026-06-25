@@ -24,8 +24,11 @@ const LABELS = {
 };
 
 const SKY_GRID = {
-  columns: 24,
-  rows: 13
+  targetColumns: 24,
+  minCellSize: 28,
+  maxCellSize: 72,
+  stageMinCellSize: 18,
+  stageMaxCellSize: 42
 };
 
 const SKY_PALETTES = {
@@ -61,6 +64,13 @@ const SKY_PALETTES = {
   ]
 };
 
+const THEME_COLORS = {
+  morning: "#4AC6FD",
+  day: "#00B0EB",
+  evening: "#6B5272",
+  night: "#281B4F"
+};
+
 const DAY_CLOUD_SCALE = 0.4;
 
 const DAY_CLOUDS = [
@@ -91,6 +101,19 @@ const DAY_CLOUD_LAYOUTS = {
   ]
 };
 
+const NIGHT_STAR_CONFIG = {
+  pageCount: 140,
+  stageCount: 34,
+  duration: 16,
+  pageMaxSize: 8,
+  stageMaxSize: 6,
+  colors: [
+    "rgba(255, 255, 230, 0.86)",
+    "rgba(255, 243, 188, 0.74)",
+    "rgba(222, 236, 255, 0.72)"
+  ]
+};
+
 const state = {
   doneness: "soft",
   size: "СВ",
@@ -110,6 +133,8 @@ let pixelSkyElement = null;
 let stageSkyElement = null;
 let cloudFieldElement = null;
 let stageCloudFieldElement = null;
+let nightStarFieldElement = null;
+let stageNightStarFieldElement = null;
 let themeOverride = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -150,9 +175,11 @@ function setupTimeTheme() {
   ensurePixelSky();
   ensureStageSky();
   ensureDayClouds();
+  ensureNightStars();
   bindThemeSwitcher();
   applyTimeTheme();
   window.setInterval(applyTimeTheme, 60000);
+  window.addEventListener("resize", () => renderPixelSky(currentTheme));
 }
 
 function applyTimeTheme(date = new Date()) {
@@ -160,6 +187,7 @@ function applyTimeTheme(date = new Date()) {
 
   document.body.classList.remove("theme-morning", "theme-day", "theme-evening", "theme-night");
   document.body.classList.add(`theme-${theme}`);
+  updateThemeChrome(theme);
 
   if (theme !== currentTheme) {
     renderPixelSky(theme);
@@ -167,6 +195,17 @@ function applyTimeTheme(date = new Date()) {
   }
 
   updateThemeSwitcherState();
+}
+
+function updateThemeChrome(theme) {
+  const color = THEME_COLORS[theme] || THEME_COLORS.day;
+  const themeColorMeta = document.getElementById("themeColorMeta");
+
+  document.documentElement.style.backgroundColor = color;
+
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute("content", color);
+  }
 }
 
 function bindThemeSwitcher() {
@@ -216,15 +255,6 @@ function ensurePixelSky() {
   pixelSkyElement = document.createElement("div");
   pixelSkyElement.className = "pixel-sky";
   pixelSkyElement.setAttribute("aria-hidden", "true");
-
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < SKY_GRID.columns * SKY_GRID.rows; i += 1) {
-    const pixel = document.createElement("span");
-    pixel.className = "sky-pixel";
-    fragment.appendChild(pixel);
-  }
-
-  pixelSkyElement.appendChild(fragment);
   document.body.prepend(pixelSkyElement);
 }
 
@@ -239,14 +269,6 @@ function ensureStageSky() {
     return;
   }
 
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < SKY_GRID.columns * SKY_GRID.rows; i += 1) {
-    const pixel = document.createElement("span");
-    pixel.className = "sky-pixel";
-    fragment.appendChild(pixel);
-  }
-
-  stageSkyElement.appendChild(fragment);
 }
 
 function ensureDayClouds() {
@@ -255,6 +277,40 @@ function ensureDayClouds() {
 
   renderDayClouds(cloudFieldElement, DAY_CLOUD_LAYOUTS.page);
   renderDayClouds(stageCloudFieldElement, DAY_CLOUD_LAYOUTS.stage);
+}
+
+function ensureNightStars() {
+  nightStarFieldElement = document.getElementById("nightStarField");
+  stageNightStarFieldElement = document.getElementById("stageNightStarField");
+
+  renderNightStars(nightStarFieldElement, NIGHT_STAR_CONFIG.pageCount, NIGHT_STAR_CONFIG.pageMaxSize);
+  renderNightStars(stageNightStarFieldElement, NIGHT_STAR_CONFIG.stageCount, NIGHT_STAR_CONFIG.stageMaxSize);
+}
+
+function renderNightStars(element, count, maxSize) {
+  if (!element || element.children.length > 0) {
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  for (let index = 0; index < count; index += 1) {
+    const star = document.createElement("span");
+    const size = getRandomInt(1, maxSize);
+    const color = NIGHT_STAR_CONFIG.colors[getRandomInt(0, NIGHT_STAR_CONFIG.colors.length - 1)];
+    const delay = -Math.random() * NIGHT_STAR_CONFIG.duration;
+
+    star.className = "night-star";
+    star.style.setProperty("--star-top", `${Math.random() * 100}%`);
+    star.style.setProperty("--star-left", `${Math.random() * 100}%`);
+    star.style.setProperty("--star-size", `${size}px`);
+    star.style.setProperty("--star-color", color);
+    star.style.setProperty("--star-duration", `${NIGHT_STAR_CONFIG.duration}s`);
+    star.style.setProperty("--star-delay", `${delay.toFixed(2)}s`);
+    fragment.appendChild(star);
+  }
+
+  element.appendChild(fragment);
 }
 
 function renderDayClouds(element, layouts) {
@@ -293,6 +349,10 @@ function getCloudSequence(count) {
   return sequence.slice(0, count);
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function shuffleArray(items) {
   const shuffled = [...items];
 
@@ -311,28 +371,83 @@ function renderPixelSky(theme) {
     return;
   }
 
-  renderSkyPixels(pixelSkyElement, palette, theme);
-  renderSkyPixels(stageSkyElement, palette, theme);
+  renderSkyPixels(pixelSkyElement, palette, theme, "page");
+  renderSkyPixels(stageSkyElement, palette, theme, "stage");
 }
 
-function renderSkyPixels(element, palette, theme) {
+function renderSkyPixels(element, palette, theme, area) {
   if (!element) {
     return;
   }
 
+  const metrics = getSquareSkyMetrics(element, area);
+
+  if (!metrics) {
+    return;
+  }
+
+  element.style.setProperty("--sky-cell-size", `${metrics.cellSize}px`);
+  element.style.gridTemplateColumns = `repeat(${metrics.columns}, ${metrics.cellSize}px)`;
+  element.style.gridAutoRows = `${metrics.cellSize}px`;
+  ensureSkyPixelCount(element, metrics.columns * metrics.rows);
+
   Array.from(element.children).forEach((pixel, index) => {
-    const row = Math.floor(index / SKY_GRID.columns);
-    const column = index % SKY_GRID.columns;
-    pixel.style.backgroundColor = getSkyPixelColor(palette, row, column, theme);
+    const row = Math.floor(index / metrics.columns);
+    const column = index % metrics.columns;
+    pixel.style.backgroundColor = getSkyPixelColor(palette, row, column, theme, metrics.rows);
   });
 }
 
-function getSkyPixelColor(palette, row, column, theme) {
-  const rowColors = palette[Math.min(row, palette.length - 1)];
+function getSquareSkyMetrics(element, area) {
+  const isStage = area === "stage";
+  const rect = typeof element.getBoundingClientRect === "function"
+    ? element.getBoundingClientRect()
+    : { width: 0, height: 0 };
+  const fallbackWidth = isStage ? 520 : window.innerWidth;
+  const fallbackHeight = isStage ? 430 : window.innerHeight;
+  const width = Math.ceil(rect.width || fallbackWidth);
+  const height = Math.ceil(rect.height || fallbackHeight);
+
+  if (width <= 0 || height <= 0) {
+    return null;
+  }
+
+  const minCellSize = isStage ? SKY_GRID.stageMinCellSize : SKY_GRID.minCellSize;
+  const maxCellSize = isStage ? SKY_GRID.stageMaxCellSize : SKY_GRID.maxCellSize;
+  const cellSize = clamp(Math.round(width / SKY_GRID.targetColumns), minCellSize, maxCellSize);
+
+  return {
+    cellSize,
+    columns: Math.ceil(width / cellSize) + 1,
+    rows: Math.ceil(height / cellSize) + 1
+  };
+}
+
+function ensureSkyPixelCount(element, count) {
+  while (element.children.length < count) {
+    const pixel = document.createElement("span");
+    pixel.className = "sky-pixel";
+    element.appendChild(pixel);
+  }
+
+  while (element.children.length > count) {
+    element.removeChild(element.lastElementChild);
+  }
+}
+
+function getSkyPixelColor(palette, row, column, theme, totalRows) {
+  const paletteRow = totalRows <= 1
+    ? 0
+    : Math.min(palette.length - 1, Math.round((row / (totalRows - 1)) * (palette.length - 1)));
+  const rowColors = palette[paletteRow];
   const themeShift = theme === "morning" ? 5 : 7;
   const colorIndex = Math.abs((row * themeShift + column * 3 + row * column) % rowColors.length);
 
   return rowColors[colorIndex];
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
 }
 
 function selectChoice(button) {
@@ -367,6 +482,7 @@ function startTimer(elements) {
 
   elements.setupScreen.classList.add("is-hidden");
   elements.timerScreen.classList.remove("is-hidden");
+  renderPixelSky(currentTheme);
   elements.chickenGif.src = "./assets/gif/peck.gif";
   elements.chickenGif.alt = "Курица клюет";
   elements.timerState.textContent = "ВАРИМ";
