@@ -162,10 +162,13 @@ const state = {
 let currentTheme = "";
 let pixelSkyElement = null;
 let stageSkyElement = null;
+let chefStageSkyElement = null;
 let cloudFieldElement = null;
 let stageCloudFieldElement = null;
+let chefStageCloudFieldElement = null;
 let nightStarFieldElement = null;
 let stageNightStarFieldElement = null;
+let chefStageNightStarFieldElement = null;
 let activeSiteSection = "timer";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -174,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateMenuYear();
   bindAccordions();
   loadRecipes();
+  loadHints();
   setupOfficeHelper();
 
   const elements = {
@@ -241,17 +245,17 @@ function scaleOfficeHelperImage(image) {
 }
 
 function syncOfficeHelperWithMenu(isMenuOpen) {
+  if (!isMenuOpen) {
+    hideOfficeHelper();
+    return;
+  }
+
   if (state.officeHelperOpened) {
     showOfficeHelper();
     return;
   }
 
-  if (isMenuOpen) {
-    startOfficeHelperCrackLoop();
-    return;
-  }
-
-  hideOfficeHelper();
+  startOfficeHelperCrackLoop();
 }
 
 function showOfficeHelper() {
@@ -265,11 +269,9 @@ function showOfficeHelper() {
 function hideOfficeHelper() {
   const shell = document.getElementById("officeHelperShell");
 
-  if (state.officeHelperOpened) {
-    return;
+  if (!state.officeHelperOpened) {
+    clearOfficeHelperTimer();
   }
-
-  clearOfficeHelperTimer();
 
   if (shell) {
     shell.hidden = true;
@@ -506,10 +508,10 @@ function bindAccordions() {
 
     const content = button.nextElementSibling;
     const isOpen = !button.classList.contains("active");
-    const recipesList = button.closest("#recipesList");
+    const singleAccordionList = button.closest("#recipesList, #tipsList");
 
-    if (recipesList && isOpen) {
-      recipesList.querySelectorAll(".retro-accordion__button.active").forEach((activeButton) => {
+    if (singleAccordionList && isOpen) {
+      singleAccordionList.querySelectorAll(".retro-accordion__button.active").forEach((activeButton) => {
         if (activeButton === button) {
           return;
         }
@@ -558,12 +560,62 @@ function loadRecipes() {
     .catch(() => {});
 }
 
+function loadHints() {
+  const tipsList = document.getElementById("tipsList");
+
+  if (!tipsList || !tipsList.dataset.hintsSrc || !window.fetch) {
+    return;
+  }
+
+  fetch(tipsList.dataset.hintsSrc, { cache: "no-cache" })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Hints markdown is unavailable");
+      }
+
+      return response.text();
+    })
+    .then((markdown) => {
+      const hints = parseHintsMarkdown(markdown);
+
+      if (hints.length > 0) {
+        tipsList.innerHTML = renderHintsAccordions(hints);
+      }
+    })
+    .catch(() => {});
+}
+
 function parseRecipesMarkdown(markdown) {
   return markdown
     .replace(/\r\n?/g, "\n")
     .split(/\n(?=##\s+)/)
     .map(parseRecipeBlock)
     .filter((recipe) => recipe.title && (recipe.ingredients || recipe.instructions));
+}
+
+function parseHintsMarkdown(markdown) {
+  return markdown
+    .replace(/\r\n?/g, "\n")
+    .split(/\n(?=##\s+)/)
+    .map(parseHintBlock)
+    .filter((hint) => hint.title && hint.content);
+}
+
+function parseHintBlock(block) {
+  const lines = block.split("\n");
+  const titleIndex = lines.findIndex((line) => line.startsWith("## "));
+
+  if (titleIndex === -1) {
+    return {
+      title: "",
+      content: ""
+    };
+  }
+
+  return {
+    title: lines[titleIndex].replace(/^##\s+/, "").trim(),
+    content: lines.slice(titleIndex + 1).join("\n").trim()
+  };
 }
 
 function parseRecipeBlock(block) {
@@ -623,6 +675,21 @@ function renderRecipesAccordions(recipes) {
       <div class="retro-accordion__content" id="${contentId}" hidden>
         ${renderRecipeSection("Ингредиенты", recipe.ingredients, `recipe-ingredients-${index}`)}
         ${renderRecipeSection("Рецепт", recipe.instructions, `recipe-steps-${index}`)}
+      </div>
+    `;
+  }).join("");
+}
+
+function renderHintsAccordions(hints) {
+  return hints.map((hint, index) => {
+    const contentId = `hint-content-${index}`;
+
+    return `
+      <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="${contentId}">${escapeHtml(hint.title)}</button>
+      <div class="retro-accordion__content" id="${contentId}" hidden>
+        <div class="recipe-copy">
+          ${renderMarkdownText(hint.content)}
+        </div>
       </div>
     `;
   }).join("");
@@ -804,6 +871,10 @@ function setSiteMenuOpen(isOpen) {
   menuPanel.classList.toggle("is-hidden", !isOpen);
   updateMenuToggleState(isOpen);
   syncOfficeHelperWithMenu(isOpen);
+
+  if (!isOpen) {
+    refreshVisibleStageTheme();
+  }
 }
 
 function updateMenuToggleState(isOpen) {
@@ -850,6 +921,7 @@ function switchSiteSection(section, options = {}) {
 
   updateMenuToggleState(false);
   syncOfficeHelperWithMenu(false);
+  refreshVisibleStageTheme();
 }
 
 function setupTimeTheme() {
@@ -860,6 +932,14 @@ function setupTimeTheme() {
   applyTimeTheme();
   window.setInterval(applyTimeTheme, 60000);
   window.addEventListener("resize", () => renderPixelSky(currentTheme));
+}
+
+function refreshVisibleStageTheme() {
+  if (!currentTheme) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => renderPixelSky(currentTheme));
 }
 
 function applyTimeTheme(date = new Date()) {
@@ -916,32 +996,33 @@ function ensurePixelSky() {
 }
 
 function ensureStageSky() {
-  if (stageSkyElement) {
+  if (stageSkyElement && chefStageSkyElement) {
     return;
   }
 
   stageSkyElement = document.getElementById("stageSky");
-
-  if (!stageSkyElement) {
-    return;
-  }
+  chefStageSkyElement = document.getElementById("chefStageSky");
 
 }
 
 function ensureDayClouds() {
   cloudFieldElement = document.getElementById("cloudField");
   stageCloudFieldElement = document.getElementById("stageCloudField");
+  chefStageCloudFieldElement = document.getElementById("chefStageCloudField");
 
   renderDayClouds(cloudFieldElement, DAY_CLOUD_LAYOUTS.page);
   renderDayClouds(stageCloudFieldElement, DAY_CLOUD_LAYOUTS.stage);
+  renderDayClouds(chefStageCloudFieldElement, DAY_CLOUD_LAYOUTS.stage);
 }
 
 function ensureNightStars() {
   nightStarFieldElement = document.getElementById("nightStarField");
   stageNightStarFieldElement = document.getElementById("stageNightStarField");
+  chefStageNightStarFieldElement = document.getElementById("chefStageNightStarField");
 
   renderNightStars(nightStarFieldElement, NIGHT_STAR_CONFIG.pageCount, NIGHT_STAR_CONFIG.pageMaxSize);
   renderNightStars(stageNightStarFieldElement, NIGHT_STAR_CONFIG.stageCount, NIGHT_STAR_CONFIG.stageMaxSize);
+  renderNightStars(chefStageNightStarFieldElement, NIGHT_STAR_CONFIG.stageCount, NIGHT_STAR_CONFIG.stageMaxSize);
 }
 
 function renderNightStars(element, count, maxSize) {
@@ -1030,6 +1111,7 @@ function renderPixelSky(theme) {
 
   renderSkyPixels(pixelSkyElement, palette, theme, "page");
   renderSkyPixels(stageSkyElement, palette, theme, "stage");
+  renderSkyPixels(chefStageSkyElement, palette, theme, "stage");
 }
 
 function renderSkyPixels(element, palette, theme, area) {

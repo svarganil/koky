@@ -50,18 +50,9 @@
                   <h3>Тип варки</h3>
                 </div>
                 <div class="choice-grid choice-grid--three" role="radiogroup" aria-label="Тип варки">
-                  <div class="retro-tooltip-container">
-                    <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true" aria-describedby="tooltip-soft">Всмятку</button>
-                    <div class="retro-tooltip" id="tooltip-soft" role="tooltip">Жидкий желток и нежный белок</div>
-                  </div>
-                  <div class="retro-tooltip-container">
-                    <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false" aria-describedby="tooltip-jammy">В мешочек</button>
-                    <div class="retro-tooltip" id="tooltip-jammy" role="tooltip">Мягкий центр, желток уже держит форму</div>
-                  </div>
-                  <div class="retro-tooltip-container">
-                    <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false" aria-describedby="tooltip-hard">Вкрутую</button>
-                    <div class="retro-tooltip" id="tooltip-hard" role="tooltip">Плотный белок и полностью готовый желток</div>
-                  </div>
+                  <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true">Всмятку</button>
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false">В мешочек</button>
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false">Вкрутую</button>
                 </div>
               </li>
 
@@ -260,8 +251,119 @@
               <span class="menu-toggle__symbol" aria-hidden="true">Ξ</span>
             </button>
           </div>
-          <div class="placeholder-box">
-            <p>Раздел скоро появится.</p>
+          <div class="retro-accordion tips-accordion" id="tipsList" data-hints-src="./md/hints.md">
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-0">Категория и хранение</button>
+            <div class="retro-accordion__content" id="hint-content-0" hidden>
+              <div class="recipe-copy">
+                <p>Столовые яйца (маркируются синей буквой С) — можно хранить до 25 дней при комнатной температуре и до 120 дней — в холодильнике.</p>
+                <p>Столовые яйца делятся на категории по весу. Больше цифра — меньше размер:</p>
+                <ul class="recipe-list">
+                  <li>С3 — столовое яйцо третьей категории / 35–44,9 г</li>
+                  <li>С2 — столовое яйцо второй категории / 45–54,9 г</li>
+                  <li>С1 — столовое яйцо первой категории / 55–64,9 г</li>
+                  <li>СО — столовое яйцо отборное / 65–74,9 г</li>
+                  <li>СВ — столовое яйцо высшей категории / более 75 г</li>
+                </ul>
+                <p>При этом категорию яиц определяет только вес, а не пищевые показатели. Это учитывается и при готовке: чем легче яйцо, тем быстрее оно сварится.</p>
+                <p>Диетические яйца (маркируются красной буквой Д) — срок реализации доходит до 7 дней.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-1">Нужно ли мыть куриные яйца</button>
+            <div class="retro-accordion__content" id="hint-content-1" hidden>
+              <div class="recipe-copy">
+                <p>Мыть яйца перед хранением не стоит — так они быстрее теряют свежесть. А вот перед приготовлением ополоснуть скорлупу можно и нужно.</p>
+                <p>Опять же всё зависит от твоей брезгливости.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-2">Принципы варки яиц</button>
+            <div class="retro-accordion__content" id="hint-content-2" hidden>
+              <div class="recipe-copy">
+                <p>Четыре простых правила для варки яиц любой категории:</p>
+                <ol class="recipe-steps">
+                  <li>Достань яйца из холодильника заранее и дай им прогреться до комнатной температуры — иначе от резкого перепада температур скорлупа может треснуть.</li>
+                  <li>Вода должна полностью покрывать яйца. Доведи её до кипения, посоли из расчёта чайная ложка на литр и немного убавь огонь — яйца должны лежать плотно и вариться в слабо кипящей воде, не стукаясь о кастрюлю, иначе скорлупа треснет и белок вытечет.</li>
+                  <li>Опускай яйца в воду ложкой или шумовкой. Время варки — от 2 до 15 минут в зависимости от желаемой консистенции и категории яиц.</li>
+                  <li>Готовые яйца сразу переложи в холодную воду — со льдом или просто под краном.</li>
+                </ol>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-3">Зачем прокалывать яйца перед варкой</button>
+            <div class="retro-accordion__content" id="hint-content-3" hidden>
+              <div class="recipe-copy">
+                <p>Некоторые прокалывают скорлупу булавкой перед варкой — вода проникает между скорлупой и мембраной, и яйцо потом легче чистится.</p>
+                <p class="recipe-link-row"><a class="retro-button retro-button--link recipe-link" href="https://ozon.ru/t/fIwweMl" target="_blank" rel="noopener noreferrer">Удобнее всего использовать специальный прокалыватель.</a></p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-4">Яйца всмятку</button>
+            <div class="retro-accordion__content" id="hint-content-4" hidden>
+              <div class="recipe-copy">
+                <p>У яйца всмятку — жидкий желток и нетвёрдый белок. Такое яйцо можно приготовить и без варки: залей яйца кипятком, подожди 10 минут, слей воду и снова залей кипятком на 2–3 минуты. Белок при этом не твердеет, а лишь сгущается в нежную массу, желток остаётся полужидким.</p>
+                <p>Для получения такой консистенции используй мой таймер.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-5">Яйца в мешочек</button>
+            <div class="retro-accordion__content" id="hint-content-5" hidden>
+              <div class="recipe-copy">
+                <p>У яйца в мешочек твёрдый белок и жидкий кремовый желток в середине.</p>
+                <p>Для получения такой консистенции используй мой таймер.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-6">Яйца вкрутую</button>
+            <div class="retro-accordion__content" id="hint-content-6" hidden>
+              <div class="recipe-copy">
+                <p>У яйца вкрутую — полностью затвердевший желток и плотный белок.</p>
+                <p>Проверить готовность просто: раскрути яйцо — вкрутую оно вращается ровно, сырое — покачивается.</p>
+                <p>Для получения такой консистенции используй мой таймер.</p>
+                <p>А если хочешь модный мягкий в центре желток — уменьши время варки на 1–1,5 минуты.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-7">Варка перепелиных яиц</button>
+            <div class="retro-accordion__content" id="hint-content-7" hidden>
+              <div class="recipe-copy">
+                <p>Да, их тоже можно варить всмятку, в мешочек и вкрутую, но есть нюансы, так что выделил отдельным пунктом.</p>
+                <p>Варятся довольно просто. Примерно за полчаса до варки вынь яйца из холодильника — особенно если планируешь опускать их сразу в кипяток. Так скорлупа не треснет от перепада температур.</p>
+                <p>Перепелиные яйца вкрутую кладут в холодную воду и варят 4 минуты после закипания. В мешочек — опускают в кипяток на 3 минуты, затем сразу в холодную воду. Всмятку — то же самое, но достаточно 2 минут.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-8">Как быстро чистить яйца</button>
+            <div class="retro-accordion__content" id="hint-content-8" hidden>
+              <div class="recipe-copy">
+                <p>Положи яйцо на стол, накрой ладонью и покатай, слегка надавливая — скорлупа равномерно растрескается и легко снимется. Способ работает и с куриными, и с перепелиными.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-9">Резак для яиц всмятку</button>
+            <div class="retro-accordion__content" id="hint-content-9" hidden>
+              <div class="recipe-copy">
+                <p>Eierschalensollbruchstellenverursacher — немецкий гаджет для вскрытия яиц всмятку: небольшой, но увесистый металлический шарик резко ударяет по куполу на скорлупе, что делает ровный круговой надрез для аккуратного снятия верхушки.</p>
+                <p>Кстати, дословно означает «устройство для создания заданной точки разлома яичной скорлупы». Немцы славятся умением упаковать целое описание предмета в одно слово...</p>
+                <p class="recipe-link-row"><a class="retro-button retro-button--link recipe-link" href="https://ozon.ru/t/aHXY3OH" target="_blank" rel="noopener noreferrer">Свой купил тут.</a></p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-10">Сколько яиц можно есть в день</button>
+            <div class="retro-accordion__content" id="hint-content-10" hidden>
+              <div class="recipe-copy">
+                <p>Для здорового человека одно-два яйца в день — норма, которая не повышает риск сердечно-сосудистых заболеваний. Но важно не только количество, а ещё и с чем их ешь: яйцо пашот с цельнозерновым хлебом и овощами — одно дело, яичница с беконом — совсем другое. Людям с диабетом или нарушениями липидного обмена стоит обсудить норму с врачом.</p>
+                <p>Холестерин в яйцах долго был поводом для тревоги, но сейчас учёные смотрят на это иначе: пищевой холестерин слабо влияет на его уровень в крови. Организм сам производит около 80% холестерина, а куда важнее — сколько клетчатки ты ешь и каков образ жизни в целом.</p>
+              </div>
+            </div>
+
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-11">Можно ли пить сырые яйца</button>
+            <div class="retro-accordion__content" id="hint-content-11" hidden>
+              <div class="recipe-copy">
+                <p>Сырые яйца пьют ради голоса, от похмелья и для набора мышц — как Рокки. Цистеин действительно помогает при похмелье, горло яйца тоже смягчают, но вот с белком всё наоборот: из сырых усваивается лишь около 50%, из варёных — 90%. Вдобавок сырой белок блокирует усвоение биотина.</p>
+                <p>Главный риск — сальмонеллёз, хотя вероятность заражения невелика. Детям, беременным и пожилым сырые яйца лучше не есть совсем. Вывод простой: польза есть, но варёные яйца во всём выигрывают.</p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -272,8 +374,18 @@
               <span class="menu-toggle__symbol" aria-hidden="true">Ξ</span>
             </button>
           </div>
-          <div class="placeholder-box">
-            <p>Раздел скоро появится.</p>
+          <div class="chef-scene">
+            <div class="stage-sky chef-stage-sky" id="chefStageSky" aria-hidden="true"></div>
+            <div class="stage-cloud-field chef-stage-cloud-field" id="chefStageCloudField" aria-hidden="true"></div>
+            <div class="stage-night-star-field chef-stage-night-star-field" id="chefStageNightStarField" aria-hidden="true"></div>
+            <blockquote class="retro-blockquote chef-bubble">
+              <p>Что было раньше — курица или яйцо? Лично мне — пофигу. Факт один: без курицы нет и яйца — «философского камня» кулинарии.</p>
+              <p>Варёные яйца — это база. Кто-то любит просто вкрутую с щедрой порцией мазика, а кто-то, подобно Королю из «Бременских Музыкантов», — всмятку уплетать ложечкой. Жаль только переменных, чтобы достичь нужной консистенции с первого раза, слишком много.</p>
+              <p>Именно поэтому я сварил больше сотни яиц и перебрал десятки комбинаций. А как известно, самое лучшее мы делаем для себя, так что без паники — твои яйца в надёжных руках.</p>
+              <p>Удачной варки!</p>
+              <p>— АВ</p>
+            </blockquote>
+            <img class="chef-avatar" src="./assets/av.png" alt="АВ">
           </div>
         </section>
       </main>
