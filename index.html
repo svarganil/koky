@@ -39,9 +39,7 @@
             <div class="panel-head">
               <h2 class="retro-subheading" id="setupTitle">Настройка яйца</h2>
               <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
-                <span class="menu-toggle__line" aria-hidden="true"></span>
-                <span class="menu-toggle__line" aria-hidden="true"></span>
-                <span class="menu-toggle__line" aria-hidden="true"></span>
+                <span class="menu-toggle__symbol" aria-hidden="true">Ξ</span>
               </button>
             </div>
 
@@ -106,9 +104,7 @@
             <div class="panel-head">
               <h2 class="retro-subheading">Таймер варки</h2>
               <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
-                <span class="menu-toggle__line" aria-hidden="true"></span>
-                <span class="menu-toggle__line" aria-hidden="true"></span>
-                <span class="menu-toggle__line" aria-hidden="true"></span>
+                <span class="menu-toggle__symbol" aria-hidden="true">Ξ</span>
               </button>
             </div>
 
@@ -143,16 +139,15 @@
           <div class="panel-head">
             <h2 class="retro-subheading" id="siteMenuTitle">Меню</h2>
             <button class="menu-toggle" type="button" data-menu-toggle aria-label="Закрыть меню" aria-controls="siteMenuView" aria-expanded="true">
-              <span class="menu-toggle__line" aria-hidden="true"></span>
-              <span class="menu-toggle__line" aria-hidden="true"></span>
-              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__symbol" aria-hidden="true">×</span>
             </button>
           </div>
 
           <nav class="site-menu" aria-label="Разделы сайта">
             <button class="site-menu__item is-active" type="button" data-section-target="timer" aria-current="page">Таймер варки</button>
+            <button class="site-menu__item" type="button" data-section-target="tips">Советы</button>
             <button class="site-menu__item" type="button" data-section-target="recipes">Рецепты</button>
-            <button class="site-menu__item" type="button" data-section-target="faq">FAQ</button>
+            <button class="site-menu__item" type="button" data-section-target="chef">От Шефа</button>
             <div class="site-menu__meta">
               <span>Версия 0.1</span>
               <span>© <span id="menuYear">2026</span> <a href="https://svarganil.ru" target="_blank" rel="noopener noreferrer">Сварганил</a></span>
@@ -164,9 +159,105 @@
           <div class="panel-head">
             <h2 class="retro-subheading" id="recipesTitle">Рецепты</h2>
             <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
-              <span class="menu-toggle__line" aria-hidden="true"></span>
-              <span class="menu-toggle__line" aria-hidden="true"></span>
-              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__symbol" aria-hidden="true">Ξ</span>
+            </button>
+          </div>
+          <div class="retro-accordion recipes-accordion" id="recipesList" data-recipes-src="./md/recipes.md">
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="recipe-content-0">Чылбыр (яйца по-турецки)</button>
+            <div class="retro-accordion__content" id="recipe-content-0" hidden>
+              <section class="recipe-section" aria-labelledby="recipe-ingredients-0">
+                <h3 id="recipe-ingredients-0">Ингредиенты</h3>
+                <div class="recipe-copy">
+                  <p>Йогуртовый соус:</p>
+                  <ul class="recipe-list">
+                    <li>Греческий йогурт (густой) — 250 г</li>
+                    <li>Укроп — 2-3 веточки</li>
+                    <li>Чеснок — 1 зубчик</li>
+                    <li>Соль — ¼ ч. л.</li>
+                    <li>TABASCO Jalapeno¹ — ¼ ч. л.</li>
+                  </ul>
+                  <p>Пряное масло:</p>
+                  <ul class="recipe-list">
+                    <li>Сливочное масло — 40 г</li>
+                    <li>Оливковое масло — 1 ст. л.</li>
+                    <li>Соус Lao Gan Ma² — 2 ст. л.</li>
+                  </ul>
+                  <p>Яйца пашот:</p>
+                  <ul class="recipe-list">
+                    <li>Уксус (9%) — 1 ст. л.</li>
+                    <li>Соль — ¼ ч. л.</li>
+                    <li>Яйца — 4 шт.</li>
+                  </ul>
+                  <p>Подача:</p>
+                  <ul class="recipe-list">
+                    <li>Халапеньо (свежий) — 3-5 слайсов</li>
+                    <li>Укроп — 1-2 веточки</li>
+                    <li>Пита — 1 шт.</li>
+                  </ul>
+                  <p>Можно заменить:</p>
+                  <p>¹ Небольшим количеством любой пряной сухой приправы</p>
+                  <p>² Миксом молотой копчёной паприки и хлопьев перца чили</p>
+                </div>
+              </section>
+
+              <section class="recipe-section" aria-labelledby="recipe-steps-0">
+                <h3 id="recipe-steps-0">Рецепт</h3>
+                <div class="recipe-copy">
+                  <ol class="recipe-steps">
+                    <li>Достань йогурт из холодильника заранее, чтобы он достиг комнатной температуры. Мелко нарежь укроп, чеснок раздави в прессе (или натри на мелкой тёрке). Смешай йогурт с укропом, чесноком, солью и соусом TABASCO Jalapeno. Выложи массу в две тарелки.</li>
+                    <li>В маленьком сотейнике разогрей сливочное и оливковое масло, добавь соус Lao Gan Ma, перемешай и готовь 1 минуту на небольшом огне. Оставь настаиваться на 5–10 минут, слей в соусник.</li>
+                    <li>В кастрюлю налей слой воды толщиной 8-10 сантиметров, добавь уксус и соль, доведи до кипения и убавь огонь на слабый. Яйцо комнатной температуры разбей в маленькую миску, наклони её над водой и осторожно опусти яйцо в кастрюлю, вари 2–3 минуты по 2 яйца за раз. Аккуратно достань яйца с помощью шумовки, промокни бумажным полотенцем и выложи на йогуртовый соус.</li>
+                    <li>Полей пряным маслом, укрась тонкими слайсами халапеньо и укропом. Подавай с тёплой питой.</li>
+                  </ol>
+                  <p class="recipe-link-row"><a class="retro-button retro-button--link recipe-link" href="https://t.me/slappetizer/432" target="_blank" rel="noopener noreferrer">Смотреть видео</a></p>
+                </div>
+              </section>
+            </div>
+            <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="recipe-content-1">Маринованные яйца</button>
+            <div class="retro-accordion__content" id="recipe-content-1" hidden>
+              <section class="recipe-section" aria-labelledby="recipe-ingredients-1">
+                <h3 id="recipe-ingredients-1">Ингредиенты</h3>
+                <div class="recipe-copy">
+                  <ul class="recipe-list">
+                    <li>Яйцо СО — 10 шт.</li>
+                    <li>Соль — 1 ст. л.</li>
+                    <li>Имбирь — 50 г</li>
+                    <li>Чеснок — 10 г</li>
+                    <li>Острый перец — 10 г</li>
+                    <li>Растительное масло — 2 мл</li>
+                    <li>Вода — 300 мл</li>
+                    <li>Соевый соус — 300 мл</li>
+                    <li>Тростниковый сахар — 2 ст. л.</li>
+                    <li>Зелёный лук — 30 г</li>
+                    <li>Вустерширский соус — 5 мл</li>
+                    <li>Рисовый уксус — 2 ст. л.</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="recipe-section" aria-labelledby="recipe-steps-1">
+                <h3 id="recipe-steps-1">Рецепт</h3>
+                <div class="recipe-copy">
+                  <ol class="recipe-steps">
+                    <li>Сперва отвари яйца. Вскипяти воду и посоли в пропорции чайная ложка соли на литр. Аккуратно опусти яйца, вода должна полностью покрывать их. Сбавь огонь, чтобы не было бурного кипения. Для «кремового желтка» потребуется от 4 до 5 минут в зависимости от категории (размера) и температуры яиц.</li>
+                    <li>Переложи яйца в ледяную воду, а через 5 минут смени её, чтобы остановить процесс варки внутри. Аккуратно почисти яйца и положи их в банку.</li>
+                    <li>Для маринада почисти и нарежь свежий имбирь, чеснок и острый перец. Немного обжарь их, залей водой, соевым соусом и добавь сахар. Вари 10-15 минут.</li>
+                    <li>Нарежь зелёный лук и добавь к яйцам. Капни вустерский соус, залей маринадом и добавь рисовый уксус.</li>
+                    <li>Плотно закрой банку и убери в холодильник на 24 часа.</li>
+                  </ol>
+                  <p>Подавай с хрустящим луком.</p>
+                  <p class="recipe-link-row"><a class="retro-button retro-button--link recipe-link" href="https://t.me/slappetizer/552" target="_blank" rel="noopener noreferrer">Смотреть видео</a></p>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="app-panel page-placeholder site-section is-hidden" id="tipsView" data-section-panel="tips" aria-labelledby="tipsTitle">
+          <div class="panel-head">
+            <h2 class="retro-subheading" id="tipsTitle">Советы</h2>
+            <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
+              <span class="menu-toggle__symbol" aria-hidden="true">Ξ</span>
             </button>
           </div>
           <div class="placeholder-box">
@@ -174,13 +265,11 @@
           </div>
         </section>
 
-        <section class="app-panel page-placeholder site-section is-hidden" id="faqView" data-section-panel="faq" aria-labelledby="faqTitle">
+        <section class="app-panel page-placeholder site-section is-hidden" id="chefView" data-section-panel="chef" aria-labelledby="chefTitle">
           <div class="panel-head">
-            <h2 class="retro-subheading" id="faqTitle">FAQ</h2>
+            <h2 class="retro-subheading" id="chefTitle">От Шефа</h2>
             <button class="menu-toggle" type="button" data-menu-toggle aria-label="Открыть меню" aria-controls="siteMenuView" aria-expanded="false">
-              <span class="menu-toggle__line" aria-hidden="true"></span>
-              <span class="menu-toggle__line" aria-hidden="true"></span>
-              <span class="menu-toggle__line" aria-hidden="true"></span>
+              <span class="menu-toggle__symbol" aria-hidden="true">Ξ</span>
             </button>
           </div>
           <div class="placeholder-box">
@@ -190,6 +279,14 @@
       </main>
 
       <footer class="retro-footer app-footer">
+        <div class="office-helper-shell" id="officeHelperShell" hidden>
+          <blockquote class="retro-blockquote office-helper__bubble" id="officeHelperBubble" aria-live="polite" hidden>
+            <span id="officeHelperBubbleText"></span>
+          </blockquote>
+          <button class="office-helper" id="officeHelper" type="button" aria-label="Открыть помощника">
+            <img class="office-helper__gif" id="officeHelperGif" src="./assets/gif/crackl.gif" alt="">
+          </button>
+        </div>
         <div class="ground" aria-hidden="true"></div>
       </footer>
     </div>

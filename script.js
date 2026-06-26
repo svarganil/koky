@@ -23,8 +23,28 @@ const LABELS = {
   }
 };
 
-const SITE_SECTIONS = ["timer", "recipes", "faq"];
+const SITE_SECTIONS = ["timer", "tips", "recipes", "chef"];
 const ALARM_AUDIO_SRC = "./assets/cluck.mp3";
+const OFFICE_HELPER_GIFS = {
+  crack: [
+    { src: "./assets/gif/crackl.gif", duration: 640 },
+    { src: "./assets/gif/crackr.gif", duration: 640 }
+  ],
+  open: { src: "./assets/gif/open.gif", duration: 7200 },
+  idle: { src: "./assets/gif/idle.gif" },
+  ask: { src: "./assets/gif/ask.gif" }
+};
+const OFFICE_HELPER_SCALE = 0.5;
+const OFFICE_HELPER_FACTS_SRC = "./md/facts.md";
+const OFFICE_HELPER_FALLBACK_FACTS = [
+  "В разговорной речи и жаргоне «коками» (или «яйками») называют тестикулы.",
+  "Коки (Coki) — диджей и продюсер, пионер жанра «дабстеп», половина дуэта Digital Mystikz и сооснователь лейбла DMZ.",
+  "Самое крупное яйцо страуса было получено в Китае, его вес был более 2.3 кг, а диаметр — более 18 см."
+];
+const OFFICE_HELPER_INTRO_TEXT = "Ко-ко! Я Клава — живу здесь и знаю много интересного про яйца. Жми, чтобы узнать.";
+const OFFICE_HELPER_TYPE_SPEED = 42;
+const OFFICE_HELPER_BUBBLE_HOLD = 7000;
+const OFFICE_HELPER_ASK_DELAY = 1000;
 
 const SKY_GRID = {
   targetColumns: 24,
@@ -127,7 +147,16 @@ const state = {
   endAt: 0,
   running: false,
   finished: false,
-  alarmAudio: null
+  alarmAudio: null,
+  officeHelperOpened: false,
+  officeHelperTimerId: null,
+  officeHelperCrackIndex: 0,
+  officeHelperTypingTimerId: null,
+  officeHelperBubbleTimerId: null,
+  officeHelperAskTimerId: null,
+  officeHelperAskActive: false,
+  officeHelperFactLoading: false,
+  officeHelperNextAskDelay: OFFICE_HELPER_ASK_DELAY
 };
 
 let currentTheme = "";
@@ -143,6 +172,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTimeTheme();
   bindSiteMenu();
   updateMenuYear();
+  bindAccordions();
+  loadRecipes();
+  setupOfficeHelper();
 
   const elements = {
     setupScreen: document.getElementById("setupScreen"),
@@ -181,6 +213,528 @@ function updateMenuYear() {
   if (yearElement) {
     yearElement.textContent = String(new Date().getFullYear());
   }
+}
+
+function setupOfficeHelper() {
+  const shell = document.getElementById("officeHelperShell");
+  const helper = document.getElementById("officeHelper");
+  const image = document.getElementById("officeHelperGif");
+
+  if (!shell || !helper || !image) {
+    return;
+  }
+
+  shell.hidden = true;
+  hideOfficeHelperBubble();
+  image.addEventListener("load", () => scaleOfficeHelperImage(image));
+  helper.addEventListener("click", handleOfficeHelperClick);
+  scaleOfficeHelperImage(image);
+}
+
+function scaleOfficeHelperImage(image) {
+  if (!image.naturalWidth || !image.naturalHeight) {
+    return;
+  }
+
+  image.style.width = `${Math.round(image.naturalWidth * OFFICE_HELPER_SCALE)}px`;
+  image.style.height = `${Math.round(image.naturalHeight * OFFICE_HELPER_SCALE)}px`;
+}
+
+function syncOfficeHelperWithMenu(isMenuOpen) {
+  if (state.officeHelperOpened) {
+    showOfficeHelper();
+    return;
+  }
+
+  if (isMenuOpen) {
+    startOfficeHelperCrackLoop();
+    return;
+  }
+
+  hideOfficeHelper();
+}
+
+function showOfficeHelper() {
+  const shell = document.getElementById("officeHelperShell");
+
+  if (shell) {
+    shell.hidden = false;
+  }
+}
+
+function hideOfficeHelper() {
+  const shell = document.getElementById("officeHelperShell");
+
+  if (state.officeHelperOpened) {
+    return;
+  }
+
+  clearOfficeHelperTimer();
+
+  if (shell) {
+    shell.hidden = true;
+  }
+}
+
+function startOfficeHelperCrackLoop() {
+  if (state.officeHelperOpened) {
+    return;
+  }
+
+  clearOfficeHelperTimer();
+  state.officeHelperCrackIndex = 0;
+  showOfficeHelper();
+  playOfficeHelperCrackCycle();
+}
+
+function playOfficeHelperCrackCycle() {
+  state.officeHelperTimerId = null;
+
+  if (state.officeHelperOpened || !isSiteMenuOpen()) {
+    return;
+  }
+
+  const crackGif = OFFICE_HELPER_GIFS.crack[state.officeHelperCrackIndex % OFFICE_HELPER_GIFS.crack.length];
+
+  state.officeHelperCrackIndex += 1;
+  setOfficeHelperGif(crackGif.src);
+  state.officeHelperTimerId = window.setTimeout(playOfficeHelperCrackCycle, crackGif.duration);
+}
+
+function activateOfficeHelper() {
+  if (state.officeHelperOpened) {
+    return;
+  }
+
+  state.officeHelperOpened = true;
+  state.officeHelperAskActive = false;
+  state.officeHelperFactLoading = false;
+  clearOfficeHelperTimer();
+  showOfficeHelper();
+  setOfficeHelperGif(OFFICE_HELPER_GIFS.open.src);
+  state.officeHelperTimerId = window.setTimeout(() => {
+    setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
+    showOfficeHelperBubble();
+    state.officeHelperTimerId = null;
+  }, OFFICE_HELPER_GIFS.open.duration);
+}
+
+function handleOfficeHelperClick() {
+  if (!state.officeHelperOpened) {
+    activateOfficeHelper();
+    return;
+  }
+
+  if (state.officeHelperAskActive && !state.officeHelperFactLoading) {
+    showRandomOfficeHelperFact();
+  }
+}
+
+function showOfficeHelperBubble(text = OFFICE_HELPER_INTRO_TEXT, askDelay = OFFICE_HELPER_ASK_DELAY) {
+  const bubble = document.getElementById("officeHelperBubble");
+  const textElement = document.getElementById("officeHelperBubbleText");
+
+  if (!bubble || !textElement) {
+    return;
+  }
+
+  state.officeHelperAskActive = false;
+  state.officeHelperFactLoading = false;
+  state.officeHelperNextAskDelay = askDelay;
+  clearOfficeHelperBubbleTimers();
+  textElement.textContent = "";
+  bubble.hidden = false;
+  typeOfficeHelperText(textElement, text, 0);
+}
+
+function typeOfficeHelperText(textElement, text, index) {
+  if (index >= text.length) {
+    state.officeHelperBubbleTimerId = window.setTimeout(hideOfficeHelperBubble, OFFICE_HELPER_BUBBLE_HOLD);
+    return;
+  }
+
+  textElement.textContent += text[index];
+  state.officeHelperTypingTimerId = window.setTimeout(() => {
+    typeOfficeHelperText(textElement, text, index + 1);
+  }, OFFICE_HELPER_TYPE_SPEED);
+}
+
+function showRandomOfficeHelperFact() {
+  state.officeHelperAskActive = false;
+  state.officeHelperFactLoading = true;
+  setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
+
+  fetchOfficeHelperFacts()
+    .then((facts) => {
+      if (facts.length === 0) {
+        throw new Error("No facts found");
+      }
+
+      showOfficeHelperBubble(getRandomItem(facts), 0);
+    })
+    .catch(() => {
+      showOfficeHelperBubble(getRandomItem(OFFICE_HELPER_FALLBACK_FACTS), 0);
+    });
+}
+
+function fetchOfficeHelperFacts() {
+  return fetch(OFFICE_HELPER_FACTS_SRC, { cache: "no-cache" })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Facts markdown is unavailable");
+      }
+
+      return response.text();
+    })
+    .then(parseOfficeHelperFacts);
+}
+
+function parseOfficeHelperFacts(markdown) {
+  const source = markdown.replace(/\r\n?/g, "\n").trim();
+
+  if (!source) {
+    return [];
+  }
+
+  const listFacts = source
+    .split(/\n(?=\s*(?:\d+[.)]|[-*•])\s+)/)
+    .map(cleanOfficeHelperFact)
+    .filter(Boolean);
+
+  if (listFacts.length > 0) {
+    return listFacts;
+  }
+
+  return source
+    .split(/\n{2,}/)
+    .map(cleanOfficeHelperFact)
+    .filter(Boolean);
+}
+
+function cleanOfficeHelperFact(value) {
+  return value
+    .replace(/^\s*(?:\d+[.)]|[-*•])\s+/, "")
+    .replace(/\s*\n\s*/g, " ")
+    .trim();
+}
+
+function getRandomItem(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+function hideOfficeHelperBubble() {
+  const bubble = document.getElementById("officeHelperBubble");
+  const textElement = document.getElementById("officeHelperBubbleText");
+
+  clearOfficeHelperBubbleTimers();
+
+  if (textElement) {
+    textElement.textContent = "";
+  }
+
+  if (bubble) {
+    bubble.hidden = true;
+  }
+
+  scheduleOfficeHelperAsk(state.officeHelperNextAskDelay);
+}
+
+function clearOfficeHelperBubbleTimers() {
+  if (state.officeHelperTypingTimerId) {
+    window.clearTimeout(state.officeHelperTypingTimerId);
+    state.officeHelperTypingTimerId = null;
+  }
+
+  if (state.officeHelperBubbleTimerId) {
+    window.clearTimeout(state.officeHelperBubbleTimerId);
+    state.officeHelperBubbleTimerId = null;
+  }
+
+  if (state.officeHelperAskTimerId) {
+    window.clearTimeout(state.officeHelperAskTimerId);
+    state.officeHelperAskTimerId = null;
+  }
+}
+
+function scheduleOfficeHelperAsk(delay = OFFICE_HELPER_ASK_DELAY) {
+  if (!state.officeHelperOpened) {
+    return;
+  }
+
+  state.officeHelperAskTimerId = window.setTimeout(() => {
+    setOfficeHelperGif(OFFICE_HELPER_GIFS.ask.src);
+    state.officeHelperAskActive = true;
+    state.officeHelperFactLoading = false;
+    state.officeHelperAskTimerId = null;
+  }, delay);
+}
+
+function setOfficeHelperGif(src) {
+  const image = document.getElementById("officeHelperGif");
+
+  if (!image) {
+    return;
+  }
+
+  if (image.dataset.currentSrc === src) {
+    image.removeAttribute("src");
+    window.requestAnimationFrame(() => {
+      image.src = src;
+      image.dataset.currentSrc = src;
+    });
+    return;
+  }
+
+  image.src = src;
+  image.dataset.currentSrc = src;
+}
+
+function clearOfficeHelperTimer() {
+  if (state.officeHelperTimerId) {
+    window.clearTimeout(state.officeHelperTimerId);
+    state.officeHelperTimerId = null;
+  }
+}
+
+function bindAccordions() {
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest(".retro-accordion__button");
+
+    if (!button) {
+      return;
+    }
+
+    const content = button.nextElementSibling;
+    const isOpen = !button.classList.contains("active");
+    const recipesList = button.closest("#recipesList");
+
+    if (recipesList && isOpen) {
+      recipesList.querySelectorAll(".retro-accordion__button.active").forEach((activeButton) => {
+        if (activeButton === button) {
+          return;
+        }
+
+        const activeContent = activeButton.nextElementSibling;
+        activeButton.classList.remove("active");
+        activeButton.setAttribute("aria-expanded", "false");
+
+        if (activeContent && activeContent.classList.contains("retro-accordion__content")) {
+          activeContent.hidden = true;
+        }
+      });
+    }
+
+    button.classList.toggle("active", isOpen);
+    button.setAttribute("aria-expanded", String(isOpen));
+
+    if (content && content.classList.contains("retro-accordion__content")) {
+      content.hidden = !isOpen;
+    }
+  });
+}
+
+function loadRecipes() {
+  const recipesList = document.getElementById("recipesList");
+
+  if (!recipesList || !recipesList.dataset.recipesSrc || !window.fetch) {
+    return;
+  }
+
+  fetch(recipesList.dataset.recipesSrc, { cache: "no-cache" })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Recipes markdown is unavailable");
+      }
+
+      return response.text();
+    })
+    .then((markdown) => {
+      const recipes = parseRecipesMarkdown(markdown);
+
+      if (recipes.length > 0) {
+        recipesList.innerHTML = renderRecipesAccordions(recipes);
+      }
+    })
+    .catch(() => {});
+}
+
+function parseRecipesMarkdown(markdown) {
+  return markdown
+    .replace(/\r\n?/g, "\n")
+    .split(/\n(?=##\s+)/)
+    .map(parseRecipeBlock)
+    .filter((recipe) => recipe.title && (recipe.ingredients || recipe.instructions));
+}
+
+function parseRecipeBlock(block) {
+  const recipe = {
+    title: "",
+    ingredients: "",
+    instructions: ""
+  };
+  const buffers = {
+    ingredients: [],
+    instructions: []
+  };
+  let activeSection = "";
+
+  block.split("\n").forEach((line) => {
+    if (line.startsWith("## ")) {
+      recipe.title = line.replace(/^##\s+/, "").trim();
+      return;
+    }
+
+    if (line.startsWith("### ")) {
+      activeSection = getRecipeSectionKey(line.replace(/^###\s+/, "").trim());
+      return;
+    }
+
+    if (activeSection) {
+      buffers[activeSection].push(line);
+    }
+  });
+
+  recipe.ingredients = buffers.ingredients.join("\n").trim();
+  recipe.instructions = buffers.instructions.join("\n").trim();
+
+  return recipe;
+}
+
+function getRecipeSectionKey(heading) {
+  const normalizedHeading = heading.toLowerCase();
+
+  if (normalizedHeading.startsWith("ингредиенты")) {
+    return "ingredients";
+  }
+
+  if (normalizedHeading.startsWith("рецепт")) {
+    return "instructions";
+  }
+
+  return "";
+}
+
+function renderRecipesAccordions(recipes) {
+  return recipes.map((recipe, index) => {
+    const contentId = `recipe-content-${index}`;
+
+    return `
+      <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="${contentId}">${escapeHtml(recipe.title)}</button>
+      <div class="retro-accordion__content" id="${contentId}" hidden>
+        ${renderRecipeSection("Ингредиенты", recipe.ingredients, `recipe-ingredients-${index}`)}
+        ${renderRecipeSection("Рецепт", recipe.instructions, `recipe-steps-${index}`)}
+      </div>
+    `;
+  }).join("");
+}
+
+function renderRecipeSection(title, content, id) {
+  if (!content) {
+    return "";
+  }
+
+  return `
+    <section class="recipe-section" aria-labelledby="${id}">
+      <h3 id="${id}">${title}</h3>
+      <div class="recipe-copy">
+        ${renderMarkdownText(content)}
+      </div>
+    </section>
+  `;
+}
+
+function renderMarkdownText(content) {
+  const lines = content.split("\n");
+  const html = [];
+  let activeList = "";
+
+  const closeList = () => {
+    if (!activeList) {
+      return;
+    }
+
+    html.push(activeList === "ol" ? "</ol>" : "</ul>");
+    activeList = "";
+  };
+
+  const openList = (listType, className) => {
+    if (activeList === listType) {
+      return;
+    }
+
+    closeList();
+    html.push(`<${listType} class="${className}">`);
+    activeList = listType;
+  };
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.replace(/\s{2,}$/, "").trim();
+
+    if (!line) {
+      closeList();
+      return;
+    }
+
+    const bullet = line.match(/^[•*-]\s+(.+)/);
+    const step = line.match(/^\d+\.\s+(.+)/);
+
+    if (bullet) {
+      openList("ul", "recipe-list");
+      html.push(`<li>${renderInlineMarkdown(bullet[1])}</li>`);
+      return;
+    }
+
+    if (step) {
+      openList("ol", "recipe-steps");
+      html.push(`<li>${renderInlineMarkdown(step[1])}</li>`);
+      return;
+    }
+
+    closeList();
+    html.push(`<p${isStandaloneMarkdownLink(line) ? " class=\"recipe-link-row\"" : ""}>${renderInlineMarkdown(line)}</p>`);
+  });
+
+  closeList();
+
+  return html.join("");
+}
+
+function renderInlineMarkdown(value) {
+  const linkPattern = /\[([^\]]+)]\((https?:\/\/[^)\s]+)\)/g;
+  const parts = [];
+  let lastIndex = 0;
+  let match = linkPattern.exec(value);
+
+  while (match) {
+    parts.push(escapeHtml(value.slice(lastIndex, match.index)));
+    parts.push(renderRecipeLink(match[1], match[2]));
+    lastIndex = match.index + match[0].length;
+    match = linkPattern.exec(value);
+  }
+
+  parts.push(escapeHtml(value.slice(lastIndex)));
+
+  return parts.join("");
+}
+
+function isStandaloneMarkdownLink(value) {
+  return /^\[[^\]]+]\(https?:\/\/[^)\s]+\)$/.test(value);
+}
+
+function renderRecipeLink(label, url) {
+  return `<a class="retro-button retro-button--link recipe-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+}
+
+function escapeHtml(value) {
+  const replacements = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#039;"
+  };
+
+  return String(value).replace(/[&<>"']/g, (character) => replacements[character]);
 }
 
 function bindSiteMenu() {
@@ -249,12 +803,19 @@ function setSiteMenuOpen(isOpen) {
 
   menuPanel.classList.toggle("is-hidden", !isOpen);
   updateMenuToggleState(isOpen);
+  syncOfficeHelperWithMenu(isOpen);
 }
 
 function updateMenuToggleState(isOpen) {
   document.querySelectorAll("[data-menu-toggle]").forEach((button) => {
+    const symbol = button.querySelector(".menu-toggle__symbol");
+
     button.setAttribute("aria-expanded", String(isOpen));
     button.setAttribute("aria-label", isOpen ? "Закрыть меню" : "Открыть меню");
+
+    if (symbol) {
+      symbol.textContent = isOpen ? "×" : "Ξ";
+    }
   });
 }
 
@@ -288,6 +849,7 @@ function switchSiteSection(section, options = {}) {
   }
 
   updateMenuToggleState(false);
+  syncOfficeHelperWithMenu(false);
 }
 
 function setupTimeTheme() {
