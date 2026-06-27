@@ -20,6 +20,26 @@ body {
   background-color: #00B0EB;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body {
+    cursor: url("./assets/cursor_normal.png") 2 2, auto;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  label,
+  summary,
+  .site-menu__credit-icon,
+  .office-helper {
+    cursor: url("./assets/cursor_hover.png") 2 2, pointer;
+  }
+}
+
 body.theme-morning {
   background-color: #4AC6FD;
 }
@@ -1447,6 +1467,12 @@ body.theme-night .stage-sky::after {
   text-align: center;
 }
 
+.office-helper__bubble--bored {
+  width: min(340px, calc(100vw - 32px));
+  text-align: center;
+  white-space: nowrap;
+}
+
 .office-helper__bubble[hidden] {
   display: none;
 }
@@ -1726,5 +1752,25 @@ body.theme-night .stage-sky::after {
   .night-star,
   .chicken-stage {
     animation: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .menu-toggle,
+  .site-menu__item,
+  .site-menu__credit-icon,
+  .retro-button,
+  .choice-button,
+  .retro-accordion__button,
+  .office-helper,
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  label,
+  summary {
+    cursor: url("./assets/cursor_hover.png") 2 2, pointer;
   }
 }

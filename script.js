@@ -45,7 +45,7 @@ const OFFICE_HELPER_GIFS = {
   drop: { src: "./assets/gif/drop.gif", duration: 1680 }
 };
 const OFFICE_HELPER_SCALE = 0.5;
-const OFFICE_HELPER_FACTS_SRC = "./md/facts.md";
+const OFFICE_HELPER_FACTS_SRC = "./assets/md/facts.md";
 const OFFICE_HELPER_FALLBACK_FACTS = [
   "В разговорной речи и жаргоне «коками» (или «яйками») называют тестикулы.",
   "Коки (Coki) — диджей и продюсер, пионер жанра «дабстеп», половина дуэта Digital Mystikz и сооснователь лейбла DMZ.",
@@ -413,6 +413,7 @@ function showOfficeHelperBubble(text = OFFICE_HELPER_INTRO_TEXT, askDelay = OFFI
   clearOfficeHelperBubbleTimers();
   textElement.textContent = "";
   bubble.classList.toggle("office-helper__bubble--prompt", variant === "prompt");
+  bubble.classList.toggle("office-helper__bubble--bored", variant === "bored");
   bubble.hidden = false;
   typeOfficeHelperText(textElement, text, 0);
 }
@@ -567,6 +568,7 @@ function hideOfficeHelperBubble() {
 
   if (bubble) {
     bubble.classList.remove("office-helper__bubble--prompt");
+    bubble.classList.remove("office-helper__bubble--bored");
     bubble.hidden = true;
   }
 
@@ -607,6 +609,7 @@ function resetOfficeHelperBubble() {
 
   if (bubble) {
     bubble.classList.remove("office-helper__bubble--prompt");
+    bubble.classList.remove("office-helper__bubble--bored");
     bubble.hidden = true;
   }
 }
@@ -727,7 +730,7 @@ function scheduleOfficeHelperIdleAfterDrop(boredToken) {
     }
 
     setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
-    showOfficeHelperBubble(OFFICE_HELPER_BORED_TEXT, OFFICE_HELPER_ASK_DELAY);
+    showOfficeHelperBubble(OFFICE_HELPER_BORED_TEXT, OFFICE_HELPER_ASK_DELAY, "bored");
   }, OFFICE_HELPER_GIFS.drop.duration);
 }
 
