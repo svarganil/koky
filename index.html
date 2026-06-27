@@ -46,34 +46,31 @@
             <ol class="setup-steps">
               <li class="setup-step">
                 <div class="step-title">
-                  <span class="step-number">1</span>
-                  <h3>Тип варки</h3>
+                  <h3 class="retro-badge setup-badge setup-badge--info">Тип варки</h3>
                 </div>
                 <div class="choice-grid choice-grid--three" role="radiogroup" aria-label="Тип варки">
-                  <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true">Всмятку</button>
-                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false">В мешочек</button>
-                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false">Вкрутую</button>
+                  <button class="retro-button retro-button--secondary choice-button is-selected" type="button" data-group="doneness" data-value="soft" aria-pressed="true">Всмятку</button>
+                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="doneness" data-value="jammy" aria-pressed="false">В мешочек</button>
+                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="doneness" data-value="hard" aria-pressed="false">Вкрутую</button>
                 </div>
               </li>
 
               <li class="setup-step">
                 <div class="step-title">
-                  <span class="step-number">2</span>
-                  <h3>Размер яйца</h3>
+                  <h3 class="retro-badge setup-badge setup-badge--warning">Размер яйца</h3>
                 </div>
                 <div class="choice-grid choice-grid--five" role="radiogroup" aria-label="Размер яйца">
-                  <button class="retro-button retro-button--secondary choice-button is-selected" type="button" data-group="size" data-value="СВ" aria-pressed="true">СВ</button>
-                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С0" aria-pressed="false">С0</button>
-                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С1" aria-pressed="false">С1</button>
-                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С2" aria-pressed="false">С2</button>
-                  <button class="retro-button retro-button--secondary choice-button" type="button" data-group="size" data-value="С3" aria-pressed="false">С3</button>
+                  <button class="retro-button retro-button--primary choice-button is-selected" type="button" data-group="size" data-value="СВ" aria-pressed="true">СВ</button>
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="size" data-value="С0" aria-pressed="false">С0</button>
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="size" data-value="С1" aria-pressed="false">С1</button>
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="size" data-value="С2" aria-pressed="false">С2</button>
+                  <button class="retro-button retro-button--primary choice-button" type="button" data-group="size" data-value="С3" aria-pressed="false">С3</button>
                 </div>
               </li>
 
               <li class="setup-step">
                 <div class="step-title">
-                  <span class="step-number">3</span>
-                  <h3>Температура</h3>
+                  <h3 class="retro-badge setup-badge setup-badge--success">Температура</h3>
                 </div>
                 <div class="choice-grid choice-grid--two" role="radiogroup" aria-label="Температура яиц">
                   <button class="retro-button retro-button--constructive choice-button is-selected" type="button" data-group="temperature" data-value="room" aria-pressed="true">Комнатная</button>
@@ -140,8 +137,14 @@
             <button class="site-menu__item" type="button" data-section-target="recipes">Рецепты</button>
             <button class="site-menu__item" type="button" data-section-target="chef">От Шефа</button>
             <div class="site-menu__meta">
-              <span>Версия 0.1</span>
-              <span>© <span id="menuYear">2026</span> <a href="https://svarganil.ru" target="_blank" rel="noopener noreferrer">Сварганил</a></span>
+              <div class="site-menu__meta-copy">
+                <span>Версия 0.1</span>
+                <span>© <span id="menuYear">2026</span> <a href="https://svarganil.ru" target="_blank" rel="noopener noreferrer">Сварганил</a></span>
+              </div>
+              <a class="site-menu__credit-icon" href="https://svarganil.ru" target="_blank" rel="noopener noreferrer" aria-label="Сварганил">
+                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--normal" src="./assets/c_normal.png" alt="">
+                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--hover" src="./assets/c_hover.png" alt="">
+              </a>
             </div>
           </nav>
         </section>
@@ -255,7 +258,7 @@
             <button class="retro-accordion__button" type="button" aria-expanded="false" aria-controls="hint-content-0">Категория и хранение</button>
             <div class="retro-accordion__content" id="hint-content-0" hidden>
               <div class="recipe-copy">
-                <p>Столовые яйца (маркируются синей буквой С) — можно хранить до 25 дней при комнатной температуре и до 120 дней — в холодильнике.</p>
+                <p>Столовые яйца (маркируются <span class="egg-mark egg-mark--blue">синей буквой С</span>) — можно хранить до 25 дней при комнатной температуре и до 120 дней — в холодильнике.</p>
                 <p>Столовые яйца делятся на категории по весу. Больше цифра — меньше размер:</p>
                 <ul class="recipe-list">
                   <li>С3 — столовое яйцо третьей категории / 35–44,9 г</li>
@@ -265,7 +268,7 @@
                   <li>СВ — столовое яйцо высшей категории / более 75 г</li>
                 </ul>
                 <p>При этом категорию яиц определяет только вес, а не пищевые показатели. Это учитывается и при готовке: чем легче яйцо, тем быстрее оно сварится.</p>
-                <p>Диетические яйца (маркируются красной буквой Д) — срок реализации доходит до 7 дней.</p>
+                <p>Диетические яйца (маркируются <span class="egg-mark egg-mark--red">красной буквой Д</span>) — срок реализации доходит до 7 дней.</p>
               </div>
             </div>
 

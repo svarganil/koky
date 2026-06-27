@@ -25,6 +25,15 @@ const LABELS = {
 
 const SITE_SECTIONS = ["timer", "tips", "recipes", "chef"];
 const ALARM_AUDIO_SRC = "./assets/cluck.mp3";
+const TIMER_GIFS = {
+  peck: "./assets/gif/peck.gif",
+  sleep: "./assets/gif/sleep.gif",
+  sleepReverse: "./assets/gif/sleep-reverse.gif",
+  sleepLast: "./assets/gif/sleep-last.png",
+  cluck: "./assets/gif/cluck.gif"
+};
+const SLEEP_GIF_DURATION = 880;
+const WAKE_GIF_DURATION = 480;
 const OFFICE_HELPER_GIFS = {
   crack: [
     { src: "./assets/gif/crackl.gif", duration: 640 },
@@ -42,9 +51,11 @@ const OFFICE_HELPER_FALLBACK_FACTS = [
   "Самое крупное яйцо страуса было получено в Китае, его вес был более 2.3 кг, а диаметр — более 18 см."
 ];
 const OFFICE_HELPER_INTRO_TEXT = "Ко-ко! Я Клава — живу здесь и знаю много интересного про яйца. Жми, чтобы узнать.";
+const OFFICE_HELPER_PROMPT_TEXT = "Нажми на меня.";
 const OFFICE_HELPER_TYPE_SPEED = 42;
-const OFFICE_HELPER_BUBBLE_HOLD = 7000;
-const OFFICE_HELPER_ASK_DELAY = 1000;
+const OFFICE_HELPER_BUBBLE_HOLD = 3000;
+const OFFICE_HELPER_ASK_DELAY = 0;
+const OFFICE_HELPER_PROMPT_INTERVAL = 6000;
 
 const SKY_GRID = {
   targetColumns: 24,
@@ -144,6 +155,8 @@ const state = {
   totalSeconds: 0,
   remainingSeconds: 0,
   timerId: null,
+  sleepFreezeTimerId: null,
+  sleepAnimationToken: 0,
   endAt: 0,
   running: false,
   finished: false,
@@ -154,8 +167,10 @@ const state = {
   officeHelperTypingTimerId: null,
   officeHelperBubbleTimerId: null,
   officeHelperAskTimerId: null,
+  officeHelperPromptTimerId: null,
   officeHelperAskActive: false,
   officeHelperFactLoading: false,
+  officeHelperReadyForFacts: false,
   officeHelperNextAskDelay: OFFICE_HELPER_ASK_DELAY
 };
 
@@ -271,6 +286,8 @@ function hideOfficeHelper() {
 
   if (!state.officeHelperOpened) {
     clearOfficeHelperTimer();
+    clearOfficeHelperPromptTimer();
+    resetOfficeHelperBubble();
   }
 
   if (shell) {
@@ -284,9 +301,11 @@ function startOfficeHelperCrackLoop() {
   }
 
   clearOfficeHelperTimer();
+  clearOfficeHelperPromptTimer();
   state.officeHelperCrackIndex = 0;
   showOfficeHelper();
   playOfficeHelperCrackCycle();
+  scheduleOfficeHelperPrompt();
 }
 
 function playOfficeHelperCrackCycle() {
@@ -308,14 +327,18 @@ function activateOfficeHelper() {
     return;
   }
 
+  clearOfficeHelperPromptTimer();
+  resetOfficeHelperBubble();
   state.officeHelperOpened = true;
   state.officeHelperAskActive = false;
   state.officeHelperFactLoading = false;
+  state.officeHelperReadyForFacts = false;
   clearOfficeHelperTimer();
   showOfficeHelper();
   setOfficeHelperGif(OFFICE_HELPER_GIFS.open.src);
   state.officeHelperTimerId = window.setTimeout(() => {
     setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
+    state.officeHelperReadyForFacts = true;
     showOfficeHelperBubble();
     state.officeHelperTimerId = null;
   }, OFFICE_HELPER_GIFS.open.duration);
@@ -327,12 +350,12 @@ function handleOfficeHelperClick() {
     return;
   }
 
-  if (state.officeHelperAskActive && !state.officeHelperFactLoading) {
+  if (state.officeHelperReadyForFacts && !state.officeHelperFactLoading) {
     showRandomOfficeHelperFact();
   }
 }
 
-function showOfficeHelperBubble(text = OFFICE_HELPER_INTRO_TEXT, askDelay = OFFICE_HELPER_ASK_DELAY) {
+function showOfficeHelperBubble(text = OFFICE_HELPER_INTRO_TEXT, askDelay = OFFICE_HELPER_ASK_DELAY, variant = "") {
   const bubble = document.getElementById("officeHelperBubble");
   const textElement = document.getElementById("officeHelperBubbleText");
 
@@ -345,6 +368,7 @@ function showOfficeHelperBubble(text = OFFICE_HELPER_INTRO_TEXT, askDelay = OFFI
   state.officeHelperNextAskDelay = askDelay;
   clearOfficeHelperBubbleTimers();
   textElement.textContent = "";
+  bubble.classList.toggle("office-helper__bubble--prompt", variant === "prompt");
   bubble.hidden = false;
   typeOfficeHelperText(textElement, text, 0);
 }
@@ -364,6 +388,7 @@ function typeOfficeHelperText(textElement, text, index) {
 function showRandomOfficeHelperFact() {
   state.officeHelperAskActive = false;
   state.officeHelperFactLoading = true;
+  clearOfficeHelperBubbleTimers();
   setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
 
   fetchOfficeHelperFacts()
@@ -435,10 +460,16 @@ function hideOfficeHelperBubble() {
   }
 
   if (bubble) {
+    bubble.classList.remove("office-helper__bubble--prompt");
     bubble.hidden = true;
   }
 
-  scheduleOfficeHelperAsk(state.officeHelperNextAskDelay);
+  if (state.officeHelperOpened) {
+    scheduleOfficeHelperAsk(state.officeHelperNextAskDelay);
+    return;
+  }
+
+  scheduleOfficeHelperPrompt();
 }
 
 function clearOfficeHelperBubbleTimers() {
@@ -458,17 +489,66 @@ function clearOfficeHelperBubbleTimers() {
   }
 }
 
+function resetOfficeHelperBubble() {
+  const bubble = document.getElementById("officeHelperBubble");
+  const textElement = document.getElementById("officeHelperBubbleText");
+
+  clearOfficeHelperBubbleTimers();
+
+  if (textElement) {
+    textElement.textContent = "";
+  }
+
+  if (bubble) {
+    bubble.classList.remove("office-helper__bubble--prompt");
+    bubble.hidden = true;
+  }
+}
+
+function clearOfficeHelperPromptTimer() {
+  if (state.officeHelperPromptTimerId) {
+    window.clearTimeout(state.officeHelperPromptTimerId);
+    state.officeHelperPromptTimerId = null;
+  }
+}
+
+function scheduleOfficeHelperPrompt(delay = OFFICE_HELPER_PROMPT_INTERVAL) {
+  if (state.officeHelperOpened || !isSiteMenuOpen()) {
+    return;
+  }
+
+  clearOfficeHelperPromptTimer();
+  state.officeHelperPromptTimerId = window.setTimeout(showOfficeHelperPromptBubble, delay);
+}
+
+function showOfficeHelperPromptBubble() {
+  state.officeHelperPromptTimerId = null;
+
+  if (state.officeHelperOpened || !isSiteMenuOpen()) {
+    return;
+  }
+
+  showOfficeHelperBubble(OFFICE_HELPER_PROMPT_TEXT, 0, "prompt");
+}
+
 function scheduleOfficeHelperAsk(delay = OFFICE_HELPER_ASK_DELAY) {
   if (!state.officeHelperOpened) {
     return;
   }
 
-  state.officeHelperAskTimerId = window.setTimeout(() => {
+  const showAsk = () => {
     setOfficeHelperGif(OFFICE_HELPER_GIFS.ask.src);
     state.officeHelperAskActive = true;
     state.officeHelperFactLoading = false;
     state.officeHelperAskTimerId = null;
-  }, delay);
+  };
+
+  if (delay <= 0) {
+    showAsk();
+    return;
+  }
+
+  state.officeHelperAskTimerId = window.setTimeout(showAsk, delay);
 }
 
 function setOfficeHelperGif(src) {
@@ -773,15 +853,21 @@ function renderInlineMarkdown(value) {
   let match = linkPattern.exec(value);
 
   while (match) {
-    parts.push(escapeHtml(value.slice(lastIndex, match.index)));
+    parts.push(renderHighlightedText(value.slice(lastIndex, match.index)));
     parts.push(renderRecipeLink(match[1], match[2]));
     lastIndex = match.index + match[0].length;
     match = linkPattern.exec(value);
   }
 
-  parts.push(escapeHtml(value.slice(lastIndex)));
+  parts.push(renderHighlightedText(value.slice(lastIndex)));
 
   return parts.join("");
+}
+
+function renderHighlightedText(value) {
+  return escapeHtml(value)
+    .replaceAll("синей буквой С", "<span class=\"egg-mark egg-mark--blue\">синей буквой С</span>")
+    .replaceAll("красной буквой Д", "<span class=\"egg-mark egg-mark--red\">красной буквой Д</span>");
 }
 
 function isStandaloneMarkdownLink(value) {
@@ -1222,12 +1308,13 @@ function startTimer(elements) {
   elements.setupScreen.classList.add("is-hidden");
   elements.timerScreen.classList.remove("is-hidden");
   renderPixelSky(currentTheme);
-  elements.chickenGif.src = "./assets/gif/peck.gif";
-  elements.chickenGif.alt = "Курица клюет";
+  showPeckingChicken(elements);
   elements.timerState.textContent = "ВАРИМ";
   elements.timerTitle.textContent = "До готовности";
   elements.timerRecipe.textContent = getRecipeLabel();
   elements.pauseButton.textContent = "Пауза";
+  setTimerActionButtonMode(elements.pauseButton, "primary");
+  setTimerActionsLayout(elements, "split");
 
   tick(elements);
   state.timerId = window.setInterval(() => tick(elements), 250);
@@ -1235,7 +1322,7 @@ function startTimer(elements) {
 
 function togglePause(elements) {
   if (state.finished) {
-    startTimer(elements);
+    resetTimer(elements);
     return;
   }
 
@@ -1246,6 +1333,9 @@ function togglePause(elements) {
     state.running = false;
     elements.timerState.textContent = "ПАУЗА";
     elements.pauseButton.textContent = "Продолжить";
+    showSleepingChicken(elements);
+    setTimerActionButtonMode(elements.pauseButton, "primary");
+    setTimerActionsLayout(elements, "split");
     return;
   }
 
@@ -1253,6 +1343,9 @@ function togglePause(elements) {
   state.running = true;
   elements.timerState.textContent = "ВАРИМ";
   elements.pauseButton.textContent = "Пауза";
+  showWakingChicken(elements);
+  setTimerActionButtonMode(elements.pauseButton, "primary");
+  setTimerActionsLayout(elements, "split");
   tick(elements);
   state.timerId = window.setInterval(() => tick(elements), 250);
 }
@@ -1265,6 +1358,7 @@ function resetTimer(elements) {
   state.remainingSeconds = 0;
 
   stopAlarm(elements);
+  clearSleepFreezeTimer();
   elements.timerScreen.classList.add("is-hidden");
   elements.setupScreen.classList.remove("is-hidden");
   elements.progressBar.style.width = "0%";
@@ -1293,14 +1387,95 @@ function finishTimer(elements) {
   state.running = false;
   state.finished = true;
   state.remainingSeconds = 0;
+  clearSleepFreezeTimer();
 
   renderTimer(elements);
   elements.timerState.textContent = "ГОТОВО";
-  elements.pauseButton.textContent = "Повторить";
-  elements.chickenGif.src = "./assets/gif/cluck.gif";
+  elements.pauseButton.textContent = "Завершить";
+  setTimerActionButtonMode(elements.pauseButton, "destructive");
+  setTimerActionsLayout(elements, "finished");
+  elements.chickenGif.src = TIMER_GIFS.cluck;
   elements.chickenGif.alt = "Курица кудахчет";
   showToast(elements);
   playAlarm();
+}
+
+function setTimerActionButtonMode(button, mode) {
+  button.classList.toggle("retro-button--secondary", mode !== "destructive");
+  button.classList.toggle("retro-button--destructive", mode === "destructive");
+}
+
+function setTimerActionsLayout(elements, mode) {
+  const isFinished = mode === "finished";
+
+  elements.pauseButton.classList.toggle("timer-action--wide", isFinished);
+  elements.resetButton.classList.toggle("is-hidden", isFinished);
+}
+
+function showPeckingChicken(elements) {
+  clearSleepFreezeTimer();
+  elements.chickenGif.src = TIMER_GIFS.peck;
+  elements.chickenGif.alt = "Курица клюет";
+}
+
+function showSleepingChicken(elements) {
+  clearSleepFreezeTimer();
+  const sleepAnimationToken = state.sleepAnimationToken;
+  const sleepSrc = `${TIMER_GIFS.sleep}?pause=${sleepAnimationToken}`;
+
+  elements.chickenGif.addEventListener("load", () => {
+    if (state.sleepAnimationToken !== sleepAnimationToken || state.running || state.finished) {
+      return;
+    }
+
+    state.sleepFreezeTimerId = window.setTimeout(() => {
+      if (state.sleepAnimationToken !== sleepAnimationToken || state.running || state.finished) {
+        return;
+      }
+
+      elements.chickenGif.src = TIMER_GIFS.sleepLast;
+      state.sleepFreezeTimerId = null;
+    }, SLEEP_GIF_DURATION);
+  }, { once: true });
+
+  elements.chickenGif.src = sleepSrc;
+  elements.chickenGif.alt = "Курица спит";
+}
+
+function showWakingChicken(elements) {
+  clearSleepFreezeTimer();
+  const sleepAnimationToken = state.sleepAnimationToken;
+  const sleepSrc = `${TIMER_GIFS.sleepReverse}?wake=${sleepAnimationToken}`;
+
+  elements.chickenGif.addEventListener("load", () => {
+    if (state.sleepAnimationToken !== sleepAnimationToken || !state.running || state.finished) {
+      return;
+    }
+
+    state.sleepFreezeTimerId = window.setTimeout(() => {
+      if (state.sleepAnimationToken !== sleepAnimationToken || !state.running || state.finished) {
+        return;
+      }
+
+      elements.chickenGif.src = TIMER_GIFS.peck;
+      elements.chickenGif.alt = "Курица клюет";
+      state.sleepFreezeTimerId = null;
+    }, WAKE_GIF_DURATION);
+  }, { once: true });
+
+  elements.chickenGif.src = sleepSrc;
+  elements.chickenGif.alt = "Курица просыпается";
+}
+
+function clearSleepFreezeTimer() {
+  state.sleepAnimationToken += 1;
+
+  if (!state.sleepFreezeTimerId) {
+    return;
+  }
+
+  window.clearTimeout(state.sleepFreezeTimerId);
+  state.sleepFreezeTimerId = null;
 }
 
 function getCurrentTime() {
@@ -1337,6 +1512,7 @@ function prepareAlarmSound() {
 
   audio.pause();
   audio.currentTime = 0;
+  audio.loop = false;
   audio.volume = 0;
 
   const playPromise = audio.play();
@@ -1364,6 +1540,7 @@ function playAlarm() {
 
   audio.pause();
   audio.currentTime = 0;
+  audio.loop = true;
   audio.volume = 1;
 
   const playPromise = audio.play();
@@ -1382,6 +1559,7 @@ function stopAlarm(elements) {
   if (state.alarmAudio) {
     state.alarmAudio.pause();
     state.alarmAudio.currentTime = 0;
+    state.alarmAudio.loop = false;
   }
 
   if (elements) {
