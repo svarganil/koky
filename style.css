@@ -335,9 +335,12 @@ body.theme-night .night-star-field {
   background-color: #fff;
 }
 
-.menu-toggle:active,
-.menu-toggle[aria-expanded="true"] {
+.menu-toggle:active {
   transform: translateY(4px);
+  box-shadow: none;
+}
+
+.menu-toggle[aria-expanded="true"] {
   box-shadow: none;
 }
 
@@ -427,7 +430,13 @@ body.theme-night .night-star-field {
   border-bottom-color: #cc0000;
 }
 
-.site-menu__meta .site-menu__credit-icon {
+.site-menu__socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-menu__credit-icon {
   width: 48px;
   height: 36px;
   flex: 0 0 48px;
@@ -436,8 +445,8 @@ body.theme-night .night-star-field {
   border-bottom: 0;
 }
 
-.site-menu__meta .site-menu__credit-icon:hover,
-.site-menu__meta .site-menu__credit-icon:focus {
+.site-menu__credit-icon:hover,
+.site-menu__credit-icon:focus {
   border-bottom: 0;
 }
 

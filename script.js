@@ -41,21 +41,51 @@ const OFFICE_HELPER_GIFS = {
   ],
   open: { src: "./assets/gif/open.gif", duration: 7200 },
   idle: { src: "./assets/gif/idle.gif" },
-  ask: { src: "./assets/gif/ask.gif" }
+  ask: { src: "./assets/gif/ask.gif" },
+  drop: { src: "./assets/gif/drop.gif", duration: 1680 }
 };
 const OFFICE_HELPER_SCALE = 0.5;
 const OFFICE_HELPER_FACTS_SRC = "./md/facts.md";
 const OFFICE_HELPER_FALLBACK_FACTS = [
   "В разговорной речи и жаргоне «коками» (или «яйками») называют тестикулы.",
   "Коки (Coki) — диджей и продюсер, пионер жанра «дабстеп», половина дуэта Digital Mystikz и сооснователь лейбла DMZ.",
-  "Самое крупное яйцо страуса было получено в Китае, его вес был более 2.3 кг, а диаметр — более 18 см."
+  "Самое крупное страусиное яйцо зафиксировано в Китае: оно весило более 2,3 кг и достигало 18 см в диаметре.",
+  "Яйца богаты витаминами, минералами и незаменимыми аминокислотами. Включать их в рацион 3–4 раза в неделю — вполне безопасно и полезно.",
+  "Яйца лучше готовить — так питательные вещества усваиваются полнее. Спортсмены, которые едят их сырыми, получают лишь часть белка.",
+  "Римляне были одними из первых, кто готовил омлет. В Древнем Риме его называли «овмеле», делали только из яиц и подавали с мёдом.",
+  "В среднем человек съедает от 250 до 700 яиц в год — с учётом тех, что уходят в выпечку и другие блюда.",
+  "Яйцо — универсальный символ. Его форму воспроизводят в самых разных контекстах: от знаменитых яиц Фаберже до «Киндер-сюрприза».",
+  "Цвет желтка говорит о рационе курицы. Тёмный, насыщенный — птицу кормили овощами и добавками. Бледный — признак скудного питания.",
+  "За год курица сносит в среднем 250–270 яиц — то есть занята «производством» почти без перерыва.",
+  "Антиоксиданты в составе яиц поддерживают сердце и сосуды — однако злоупотреблять ими всё же не стоит.",
+  "Реальный срок хранения яиц чуть больше принятых 25 дней. Тем не менее лучше есть их свежими.",
+  "В 2010 году курица по имени Гарриет снесла рекордное яйцо: 11,4 см в длину и 24 см в диаметре — и это в шесть месяцев от роду.",
+  "Только что снесённое яйцо нагрето до 40 градусов.",
+  "В разных странах едят яйца страуса, утки, перепела, эму и гуся. Некоторые из них считаются настоящим деликатесом.",
+  "Яйца едят тысячелетиями. Кур одомашнили ради них ещё в Индии и Юго-Восточной Азии: сперва ели сырыми, потом запекали на углях, а с появлением глиняной посуды — варили.",
+  "Лидер по потреблению яиц — Мексика: полтора яйца на человека в день. Россия — около пяти в неделю.",
+  "Всемирный день яйца отмечают каждую вторую пятницу октября с 1996 года — по решению Международной яичной комиссии.",
+  "Яйца попадали в Книгу рекордов Гиннесса не раз. В 1990 году в Бельгии приготовили омлет площадью 123 квадратных метра, а в 1987 году американец Джон Кенмуир съел 14 варёных яиц менее чем за 15 секунд.",
+  "Шоколадные яйца с сюрпризом появились ещё в конце XIX века — их придумали в России, в кондитерском товариществе «А. И. Абрикосов и сыновья». На Пасху внутрь вкладывали бумажные игрушки.",
+  "«Киндер-сюрприз» появился в середине 1970-х: Микеле Ферреро вдохновился итальянскими пасхальными пирожными в форме яйца с монеткой или игрушкой внутри.",
+  "Яйца используют не только в кулинарии: белок помогает при язве желудка, а одно яйцо натощак каждый день способствует повышению гемоглобина.",
+  "Яйца применяют и наружно: в народной медицине желтком смазывают ожоги, а в косметологии яйцо — популярный ингредиент масок для лица и волос.",
+  "Цвет скорлупы зависит от породы курицы и никак не влияет на питательную ценность. Единственное практическое отличие: коричневая скорлупа чуть прочнее и лучше переносит транспортировку.",
+  "Иногда в корм курицам добавляют каротин — чтобы желток был ярче.",
+  "Хранить яйца в дверце холодильника не стоит: там теплее и они постоянно трясутся. Лучше — в овощном ящике, в родной картонной упаковке, узким концом вниз.",
+  "В Китае делают искусственные яйца из химических веществ. Выдаёт подделку слишком блестящая скорлупа и то, что белок с желтком со временем сливаются в единую массу. Регулярное употребление опасно.",
+  "Проверить свежесть яйца просто: опустите его в холодную воду. Свежее утонет, несвежее всплывёт — такое лучше не есть.",
+  "Разница между диетическими и столовыми яйцами — в свежести. Диетические хранятся не более 7 дней после снесения, столовые — до 25.",
+  "Забавный факт: ты — петух!"
 ];
 const OFFICE_HELPER_INTRO_TEXT = "Ко-ко! Я Клава — живу здесь и знаю много интересного про яйца. Жми, чтобы узнать.";
 const OFFICE_HELPER_PROMPT_TEXT = "Нажми на меня.";
+const OFFICE_HELPER_BORED_TEXT = "Мне скучно. Нажми на меня.";
 const OFFICE_HELPER_TYPE_SPEED = 42;
 const OFFICE_HELPER_BUBBLE_HOLD = 3000;
 const OFFICE_HELPER_ASK_DELAY = 0;
 const OFFICE_HELPER_PROMPT_INTERVAL = 6000;
+const OFFICE_HELPER_BORED_INTERVAL = 9000;
 
 const SKY_GRID = {
   targetColumns: 24,
@@ -168,10 +198,17 @@ const state = {
   officeHelperBubbleTimerId: null,
   officeHelperAskTimerId: null,
   officeHelperPromptTimerId: null,
+  officeHelperBoredTimerId: null,
+  officeHelperDropTimerId: null,
+  officeHelperBoredToken: 0,
   officeHelperAskActive: false,
   officeHelperFactLoading: false,
   officeHelperReadyForFacts: false,
-  officeHelperNextAskDelay: OFFICE_HELPER_ASK_DELAY
+  officeHelperNextAskDelay: OFFICE_HELPER_ASK_DELAY,
+  officeHelperFacts: [],
+  officeHelperFactsPromise: null,
+  officeHelperFactQueue: [],
+  officeHelperLastFactId: null
 };
 
 let currentTheme = "";
@@ -279,10 +316,16 @@ function showOfficeHelper() {
   if (shell) {
     shell.hidden = false;
   }
+
+  if (state.officeHelperOpened && state.officeHelperAskActive && !state.officeHelperFactLoading) {
+    scheduleOfficeHelperBored();
+  }
 }
 
 function hideOfficeHelper() {
   const shell = document.getElementById("officeHelperShell");
+
+  clearOfficeHelperBoredTimers();
 
   if (!state.officeHelperOpened) {
     clearOfficeHelperTimer();
@@ -328,6 +371,7 @@ function activateOfficeHelper() {
   }
 
   clearOfficeHelperPromptTimer();
+  clearOfficeHelperBoredTimers();
   resetOfficeHelperBubble();
   state.officeHelperOpened = true;
   state.officeHelperAskActive = false;
@@ -388,20 +432,82 @@ function typeOfficeHelperText(textElement, text, index) {
 function showRandomOfficeHelperFact() {
   state.officeHelperAskActive = false;
   state.officeHelperFactLoading = true;
+  clearOfficeHelperBoredTimers();
   clearOfficeHelperBubbleTimers();
   setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
 
-  fetchOfficeHelperFacts()
-    .then((facts) => {
-      if (facts.length === 0) {
-        throw new Error("No facts found");
-      }
-
-      showOfficeHelperBubble(getRandomItem(facts), 0);
-    })
+  getNextOfficeHelperFact()
+    .then((fact) => showOfficeHelperBubble(fact, 0))
     .catch(() => {
       showOfficeHelperBubble(getRandomItem(OFFICE_HELPER_FALLBACK_FACTS), 0);
     });
+}
+
+function getNextOfficeHelperFact() {
+  return loadOfficeHelperFacts().then((facts) => {
+    if (facts.length === 0) {
+      throw new Error("No facts found");
+    }
+
+    if (state.officeHelperFactQueue.length === 0) {
+      refillOfficeHelperFactQueue(facts);
+    }
+
+    const fact = state.officeHelperFactQueue.shift();
+    state.officeHelperLastFactId = fact.id;
+
+    return fact.text;
+  });
+}
+
+function loadOfficeHelperFacts() {
+  if (state.officeHelperFacts.length > 0) {
+    return Promise.resolve(state.officeHelperFacts);
+  }
+
+  if (!state.officeHelperFactsPromise) {
+    state.officeHelperFactsPromise = fetchOfficeHelperFacts()
+      .catch(() => OFFICE_HELPER_FALLBACK_FACTS)
+      .then(indexOfficeHelperFacts)
+      .then((facts) => {
+        state.officeHelperFacts = facts;
+        return facts;
+      })
+      .catch((error) => {
+        state.officeHelperFactsPromise = null;
+        throw error;
+      });
+  }
+
+  return state.officeHelperFactsPromise;
+}
+
+function indexOfficeHelperFacts(facts) {
+  return facts.map((text, index) => ({
+    id: index + 1,
+    text
+  }));
+}
+
+function refillOfficeHelperFactQueue(facts) {
+  state.officeHelperFactQueue = shuffleArray(facts);
+
+  if (state.officeHelperFactQueue.length < 2 || state.officeHelperLastFactId === null) {
+    return;
+  }
+
+  if (state.officeHelperFactQueue[0].id !== state.officeHelperLastFactId) {
+    return;
+  }
+
+  const swapIndex = state.officeHelperFactQueue.findIndex((fact) => fact.id !== state.officeHelperLastFactId);
+
+  if (swapIndex > 0) {
+    [state.officeHelperFactQueue[0], state.officeHelperFactQueue[swapIndex]] = [
+      state.officeHelperFactQueue[swapIndex],
+      state.officeHelperFactQueue[0]
+    ];
+  }
 }
 
 function fetchOfficeHelperFacts() {
@@ -532,6 +638,8 @@ function showOfficeHelperPromptBubble() {
 }
 
 function scheduleOfficeHelperAsk(delay = OFFICE_HELPER_ASK_DELAY) {
+  clearOfficeHelperBoredTimers();
+
   if (!state.officeHelperOpened) {
     return;
   }
@@ -541,6 +649,7 @@ function scheduleOfficeHelperAsk(delay = OFFICE_HELPER_ASK_DELAY) {
     state.officeHelperAskActive = true;
     state.officeHelperFactLoading = false;
     state.officeHelperAskTimerId = null;
+    scheduleOfficeHelperBored();
   };
 
   if (delay <= 0) {
@@ -549,6 +658,91 @@ function scheduleOfficeHelperAsk(delay = OFFICE_HELPER_ASK_DELAY) {
   }
 
   state.officeHelperAskTimerId = window.setTimeout(showAsk, delay);
+}
+
+function scheduleOfficeHelperBored(delay = OFFICE_HELPER_BORED_INTERVAL) {
+  if (
+    !state.officeHelperOpened ||
+    !state.officeHelperReadyForFacts ||
+    !state.officeHelperAskActive ||
+    state.officeHelperFactLoading ||
+    !isSiteMenuOpen()
+  ) {
+    return;
+  }
+
+  clearOfficeHelperBoredTimers();
+  const boredToken = state.officeHelperBoredToken;
+  state.officeHelperBoredTimerId = window.setTimeout(() => showOfficeHelperBoredPrompt(boredToken), delay);
+}
+
+function showOfficeHelperBoredPrompt(boredToken) {
+  state.officeHelperBoredTimerId = null;
+
+  if (
+    boredToken !== state.officeHelperBoredToken ||
+    !state.officeHelperOpened ||
+    !state.officeHelperReadyForFacts ||
+    state.officeHelperFactLoading ||
+    !isSiteMenuOpen()
+  ) {
+    return;
+  }
+
+  playOfficeHelperDropOnce(boredToken);
+}
+
+function playOfficeHelperDropOnce(boredToken) {
+  const image = document.getElementById("officeHelperGif");
+
+  if (image) {
+    image.addEventListener("load", () => {
+      scheduleOfficeHelperIdleAfterDrop(boredToken);
+    }, { once: true });
+  }
+
+  setOfficeHelperGif(OFFICE_HELPER_GIFS.drop.src);
+
+  if (!image) {
+    scheduleOfficeHelperIdleAfterDrop(boredToken);
+  }
+}
+
+function scheduleOfficeHelperIdleAfterDrop(boredToken) {
+  if (boredToken !== state.officeHelperBoredToken) {
+    return;
+  }
+
+  state.officeHelperDropTimerId = window.setTimeout(() => {
+    state.officeHelperDropTimerId = null;
+
+    if (
+      boredToken !== state.officeHelperBoredToken ||
+      !state.officeHelperOpened ||
+      !state.officeHelperReadyForFacts ||
+      state.officeHelperFactLoading ||
+      !isSiteMenuOpen()
+    ) {
+      return;
+    }
+
+    setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
+    showOfficeHelperBubble(OFFICE_HELPER_BORED_TEXT, OFFICE_HELPER_ASK_DELAY);
+  }, OFFICE_HELPER_GIFS.drop.duration);
+}
+
+function clearOfficeHelperBoredTimers() {
+  state.officeHelperBoredToken += 1;
+
+  if (state.officeHelperBoredTimerId) {
+    window.clearTimeout(state.officeHelperBoredTimerId);
+    state.officeHelperBoredTimerId = null;
+  }
+
+  if (state.officeHelperDropTimerId) {
+    window.clearTimeout(state.officeHelperDropTimerId);
+    state.officeHelperDropTimerId = null;
+  }
 }
 
 function setOfficeHelperGif(src) {

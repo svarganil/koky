@@ -123,9 +123,18 @@
           </section>
         </section>
 
-        <section class="app-panel site-menu-panel is-hidden" id="siteMenuView" aria-labelledby="siteMenuTitle">
+        <section class="app-panel site-menu-panel is-hidden" id="siteMenuView" aria-label="Меню">
           <div class="panel-head">
-            <h2 class="retro-subheading" id="siteMenuTitle">Меню</h2>
+            <div class="site-menu__socials">
+              <a class="site-menu__credit-icon" href="https://svarganil.ru" target="_blank" rel="noopener noreferrer" aria-label="Сварганил">
+                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--normal" src="./assets/c_normal.png" alt="">
+                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--hover" src="./assets/c_hover.png" alt="">
+              </a>
+              <a class="site-menu__credit-icon" href="https://t.me/slappetizer" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--normal" src="./assets/tg_normal.png" alt="">
+                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--hover" src="./assets/tg_hover.png" alt="">
+              </a>
+            </div>
             <button class="menu-toggle" type="button" data-menu-toggle aria-label="Закрыть меню" aria-controls="siteMenuView" aria-expanded="true">
               <span class="menu-toggle__symbol" aria-hidden="true">×</span>
             </button>
@@ -138,13 +147,9 @@
             <button class="site-menu__item" type="button" data-section-target="chef">От Шефа</button>
             <div class="site-menu__meta">
               <div class="site-menu__meta-copy">
-                <span>Версия 0.1</span>
-                <span>© <span id="menuYear">2026</span> <a href="https://svarganil.ru" target="_blank" rel="noopener noreferrer">Сварганил</a></span>
+                <span>Версия 1.0</span>
+                <span>© <span id="menuYear">2026</span> Сварганил</span>
               </div>
-              <a class="site-menu__credit-icon" href="https://svarganil.ru" target="_blank" rel="noopener noreferrer" aria-label="Сварганил">
-                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--normal" src="./assets/c_normal.png" alt="">
-                <img class="site-menu__credit-icon-image site-menu__credit-icon-image--hover" src="./assets/c_hover.png" alt="">
-              </a>
             </div>
           </nav>
         </section>
