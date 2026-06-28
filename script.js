@@ -45,6 +45,15 @@ const OFFICE_HELPER_GIFS = {
   drop: { src: "./assets/gif/drop.gif", duration: 1680 }
 };
 const OFFICE_HELPER_SCALE = 0.5;
+const ANIMATION_TRANSITION_GUARD = 80;
+const ANIMATION_PRELOAD_SRCS = [
+  ...Object.values(TIMER_GIFS),
+  ...OFFICE_HELPER_GIFS.crack.map((gif) => gif.src),
+  OFFICE_HELPER_GIFS.open.src,
+  OFFICE_HELPER_GIFS.idle.src,
+  OFFICE_HELPER_GIFS.ask.src,
+  OFFICE_HELPER_GIFS.drop.src
+];
 const OFFICE_HELPER_FACTS_SRC = "./assets/md/facts.md";
 const OFFICE_HELPER_FALLBACK_FACTS = [
   "В разговорной речи и жаргоне «коками» (или «яйками») называют тестикулы.",
@@ -187,12 +196,14 @@ const state = {
   timerId: null,
   sleepFreezeTimerId: null,
   sleepAnimationToken: 0,
+  timerChickenToken: 0,
   endAt: 0,
   running: false,
   finished: false,
   alarmAudio: null,
   officeHelperOpened: false,
   officeHelperTimerId: null,
+  officeHelperGifToken: 0,
   officeHelperCrackIndex: 0,
   officeHelperTypingTimerId: null,
   officeHelperBubbleTimerId: null,
@@ -223,8 +234,10 @@ let nightStarFieldElement = null;
 let stageNightStarFieldElement = null;
 let chefStageNightStarFieldElement = null;
 let activeSiteSection = "timer";
+const animationPreloadCache = new Map();
 
 document.addEventListener("DOMContentLoaded", () => {
+  warmAnimationAssets();
   setupTimeTheme();
   bindSiteMenu();
   updateMenuYear();
@@ -260,9 +273,85 @@ document.addEventListener("DOMContentLoaded", () => {
   elements.startButton.addEventListener("click", () => startTimer(elements));
   elements.pauseButton.addEventListener("click", () => togglePause(elements));
   elements.resetButton.addEventListener("click", () => resetTimer(elements));
+  elements.chickenGif.dataset.currentSrc = elements.chickenGif.getAttribute("src") || TIMER_GIFS.peck;
 
   updatePreview(elements);
 });
+
+function warmAnimationAssets() {
+  if (typeof Image === "undefined") {
+    return;
+  }
+
+  Array.from(new Set(ANIMATION_PRELOAD_SRCS)).forEach((src) => {
+    preloadAnimationAsset(src).catch(() => {});
+  });
+}
+
+function preloadAnimationAsset(src) {
+  if (!src || typeof Image === "undefined") {
+    return Promise.resolve(src);
+  }
+
+  if (animationPreloadCache.has(src)) {
+    return animationPreloadCache.get(src);
+  }
+
+  const preloadPromise = new Promise((resolve, reject) => {
+    const image = new Image();
+
+    image.onload = () => resolve(src);
+    image.onerror = () => reject(new Error(`Unable to preload ${src}`));
+    image.src = src;
+  }).catch((error) => {
+    animationPreloadCache.delete(src);
+    throw error;
+  });
+
+  animationPreloadCache.set(src, preloadPromise);
+  return preloadPromise;
+}
+
+function setPreparedImageSrc(image, src, options = {}) {
+  if (!image || !src) {
+    return Promise.resolve(false);
+  }
+
+  const { restart = false, shouldApply = () => true } = options;
+
+  return preloadAnimationAsset(src)
+    .catch(() => src)
+    .then(() => new Promise((resolve) => {
+      if (!shouldApply()) {
+        resolve(false);
+        return;
+      }
+
+      const assignSrc = () => {
+        if (!shouldApply()) {
+          resolve(false);
+          return;
+        }
+
+        image.src = src;
+        image.dataset.currentSrc = src;
+        resolve(true);
+      };
+
+      if (restart && image.dataset.currentSrc === src) {
+        image.removeAttribute("src");
+        image.dataset.currentSrc = "";
+        window.requestAnimationFrame(assignSrc);
+        return;
+      }
+
+      assignSrc();
+    }));
+}
+
+function getGuardedAnimationDuration(duration) {
+  return Math.max(0, duration - ANIMATION_TRANSITION_GUARD);
+}
 
 function updateMenuYear() {
   const yearElement = document.getElementById("menuYear");
@@ -283,6 +372,7 @@ function setupOfficeHelper() {
 
   shell.hidden = true;
   hideOfficeHelperBubble();
+  image.dataset.currentSrc = image.getAttribute("src") || OFFICE_HELPER_GIFS.crack[0].src;
   image.addEventListener("load", () => scaleOfficeHelperImage(image));
   helper.addEventListener("click", handleOfficeHelperClick);
   scaleOfficeHelperImage(image);
@@ -362,8 +452,13 @@ function playOfficeHelperCrackCycle() {
   const crackGif = OFFICE_HELPER_GIFS.crack[state.officeHelperCrackIndex % OFFICE_HELPER_GIFS.crack.length];
 
   state.officeHelperCrackIndex += 1;
-  setOfficeHelperGif(crackGif.src);
-  state.officeHelperTimerId = window.setTimeout(playOfficeHelperCrackCycle, crackGif.duration);
+  setOfficeHelperGif(crackGif.src).then((didApply) => {
+    if (!didApply || state.officeHelperOpened || !isSiteMenuOpen()) {
+      return;
+    }
+
+    state.officeHelperTimerId = window.setTimeout(playOfficeHelperCrackCycle, crackGif.duration);
+  });
 }
 
 function activateOfficeHelper() {
@@ -380,13 +475,18 @@ function activateOfficeHelper() {
   state.officeHelperReadyForFacts = false;
   clearOfficeHelperTimer();
   showOfficeHelper();
-  setOfficeHelperGif(OFFICE_HELPER_GIFS.open.src);
-  state.officeHelperTimerId = window.setTimeout(() => {
-    setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
-    state.officeHelperReadyForFacts = true;
-    showOfficeHelperBubble();
-    state.officeHelperTimerId = null;
-  }, OFFICE_HELPER_GIFS.open.duration);
+  setOfficeHelperGif(OFFICE_HELPER_GIFS.open.src).then((didApply) => {
+    if (!didApply || !state.officeHelperOpened) {
+      return;
+    }
+
+    state.officeHelperTimerId = window.setTimeout(() => {
+      setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
+      state.officeHelperReadyForFacts = true;
+      showOfficeHelperBubble();
+      state.officeHelperTimerId = null;
+    }, getGuardedAnimationDuration(OFFICE_HELPER_GIFS.open.duration));
+  });
 }
 
 function handleOfficeHelperClick() {
@@ -673,11 +773,17 @@ function scheduleOfficeHelperAsk(delay = OFFICE_HELPER_ASK_DELAY) {
   }
 
   const showAsk = () => {
-    setOfficeHelperGif(OFFICE_HELPER_GIFS.ask.src);
-    state.officeHelperAskActive = true;
-    state.officeHelperFactLoading = false;
     state.officeHelperAskTimerId = null;
-    scheduleOfficeHelperBored();
+
+    setOfficeHelperGif(OFFICE_HELPER_GIFS.ask.src).then((didApply) => {
+      if (!didApply || !state.officeHelperOpened) {
+        return;
+      }
+
+      state.officeHelperAskActive = true;
+      state.officeHelperFactLoading = false;
+      scheduleOfficeHelperBored();
+    });
   };
 
   if (delay <= 0) {
@@ -721,19 +827,11 @@ function showOfficeHelperBoredPrompt(boredToken) {
 }
 
 function playOfficeHelperDropOnce(boredToken) {
-  const image = document.getElementById("officeHelperGif");
-
-  if (image) {
-    image.addEventListener("load", () => {
+  setOfficeHelperGif(OFFICE_HELPER_GIFS.drop.src).then((didApply) => {
+    if (didApply) {
       scheduleOfficeHelperIdleAfterDrop(boredToken);
-    }, { once: true });
-  }
-
-  setOfficeHelperGif(OFFICE_HELPER_GIFS.drop.src);
-
-  if (!image) {
-    scheduleOfficeHelperIdleAfterDrop(boredToken);
-  }
+    }
+  });
 }
 
 function scheduleOfficeHelperIdleAfterDrop(boredToken) {
@@ -754,9 +852,12 @@ function scheduleOfficeHelperIdleAfterDrop(boredToken) {
       return;
     }
 
-    setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src);
-    showOfficeHelperBubble(OFFICE_HELPER_BORED_TEXT, OFFICE_HELPER_ASK_DELAY, "bored");
-  }, OFFICE_HELPER_GIFS.drop.duration);
+    setOfficeHelperGif(OFFICE_HELPER_GIFS.idle.src).then((didApply) => {
+      if (didApply) {
+        showOfficeHelperBubble(OFFICE_HELPER_BORED_TEXT, OFFICE_HELPER_ASK_DELAY, "bored");
+      }
+    });
+  }, getGuardedAnimationDuration(OFFICE_HELPER_GIFS.drop.duration));
 }
 
 function clearOfficeHelperBoredTimers() {
@@ -773,24 +874,20 @@ function clearOfficeHelperBoredTimers() {
   }
 }
 
-function setOfficeHelperGif(src) {
+function setOfficeHelperGif(src, options = {}) {
   const image = document.getElementById("officeHelperGif");
 
   if (!image) {
-    return;
+    return Promise.resolve(false);
   }
 
-  if (image.dataset.currentSrc === src) {
-    image.removeAttribute("src");
-    window.requestAnimationFrame(() => {
-      image.src = src;
-      image.dataset.currentSrc = src;
-    });
-    return;
-  }
+  const gifToken = state.officeHelperGifToken + 1;
+  state.officeHelperGifToken = gifToken;
 
-  image.src = src;
-  image.dataset.currentSrc = src;
+  return setPreparedImageSrc(image, src, {
+    restart: options.restart === true,
+    shouldApply: () => state.officeHelperGifToken === gifToken
+  });
 }
 
 function clearOfficeHelperTimer() {
@@ -1616,8 +1713,7 @@ function finishTimer(elements) {
   elements.pauseButton.textContent = "Завершить";
   setTimerActionButtonMode(elements.pauseButton, "destructive");
   setTimerActionsLayout(elements, "finished");
-  elements.chickenGif.src = TIMER_GIFS.cluck;
-  elements.chickenGif.alt = "Курица кудахчет";
+  setTimerChickenGif(elements, TIMER_GIFS.cluck, "Курица кудахчет");
   showToast(elements);
   playAlarm();
 }
@@ -1636,17 +1732,15 @@ function setTimerActionsLayout(elements, mode) {
 
 function showPeckingChicken(elements) {
   clearSleepFreezeTimer();
-  elements.chickenGif.src = TIMER_GIFS.peck;
-  elements.chickenGif.alt = "Курица клюет";
+  setTimerChickenGif(elements, TIMER_GIFS.peck, "Курица клюет");
 }
 
 function showSleepingChicken(elements) {
   clearSleepFreezeTimer();
   const sleepAnimationToken = state.sleepAnimationToken;
-  const sleepSrc = `${TIMER_GIFS.sleep}?pause=${sleepAnimationToken}`;
 
-  elements.chickenGif.addEventListener("load", () => {
-    if (state.sleepAnimationToken !== sleepAnimationToken || state.running || state.finished) {
+  setTimerChickenGif(elements, TIMER_GIFS.sleep, "Курица спит").then((didApply) => {
+    if (!didApply || state.sleepAnimationToken !== sleepAnimationToken || state.running || state.finished) {
       return;
     }
 
@@ -1655,22 +1749,18 @@ function showSleepingChicken(elements) {
         return;
       }
 
-      elements.chickenGif.src = TIMER_GIFS.sleepLast;
+      setTimerChickenGif(elements, TIMER_GIFS.sleepLast, "Курица спит", { restart: false });
       state.sleepFreezeTimerId = null;
-    }, SLEEP_GIF_DURATION);
-  }, { once: true });
-
-  elements.chickenGif.src = sleepSrc;
-  elements.chickenGif.alt = "Курица спит";
+    }, getGuardedAnimationDuration(SLEEP_GIF_DURATION));
+  });
 }
 
 function showWakingChicken(elements) {
   clearSleepFreezeTimer();
   const sleepAnimationToken = state.sleepAnimationToken;
-  const sleepSrc = `${TIMER_GIFS.sleepReverse}?wake=${sleepAnimationToken}`;
 
-  elements.chickenGif.addEventListener("load", () => {
-    if (state.sleepAnimationToken !== sleepAnimationToken || !state.running || state.finished) {
+  setTimerChickenGif(elements, TIMER_GIFS.sleepReverse, "Курица просыпается").then((didApply) => {
+    if (!didApply || state.sleepAnimationToken !== sleepAnimationToken || !state.running || state.finished) {
       return;
     }
 
@@ -1679,14 +1769,30 @@ function showWakingChicken(elements) {
         return;
       }
 
-      elements.chickenGif.src = TIMER_GIFS.peck;
-      elements.chickenGif.alt = "Курица клюет";
+      setTimerChickenGif(elements, TIMER_GIFS.peck, "Курица клюет");
       state.sleepFreezeTimerId = null;
-    }, WAKE_GIF_DURATION);
-  }, { once: true });
+    }, getGuardedAnimationDuration(WAKE_GIF_DURATION));
+  });
+}
 
-  elements.chickenGif.src = sleepSrc;
-  elements.chickenGif.alt = "Курица просыпается";
+function setTimerChickenGif(elements, src, alt, options = {}) {
+  if (!elements.chickenGif) {
+    return Promise.resolve(false);
+  }
+
+  const chickenToken = state.timerChickenToken + 1;
+  state.timerChickenToken = chickenToken;
+
+  return setPreparedImageSrc(elements.chickenGif, src, {
+    restart: options.restart === true,
+    shouldApply: () => state.timerChickenToken === chickenToken
+  }).then((didApply) => {
+    if (didApply) {
+      elements.chickenGif.alt = alt;
+    }
+
+    return didApply;
+  });
 }
 
 function clearSleepFreezeTimer() {
