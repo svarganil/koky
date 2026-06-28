@@ -1456,7 +1456,12 @@ body.theme-night .stage-sky::after {
   line-height: 1.8;
   text-align: left;
   pointer-events: none;
+  opacity: 1;
   transform: translateX(-50%);
+}
+
+.office-helper__bubble.is-leaving {
+  animation: speech-bubble-fadeout-up 0.42s ease-in forwards;
 }
 
 .office-helper__bubble::before {
@@ -1516,6 +1521,17 @@ body.theme-night .stage-sky::after {
   to {
     bottom: 0;
     opacity: 0;
+  }
+}
+
+@keyframes speech-bubble-fadeout-up {
+  from {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -14px);
   }
 }
 
@@ -1776,8 +1792,13 @@ body.theme-night .stage-sky::after {
   .stage-sky::after,
   .day-cloud,
   .night-star,
+  .office-helper__bubble.is-leaving,
   .chicken-stage {
     animation: none;
+  }
+
+  .office-helper__bubble.is-leaving {
+    opacity: 0;
   }
 }
 

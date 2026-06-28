@@ -196,6 +196,7 @@ const state = {
   officeHelperCrackIndex: 0,
   officeHelperTypingTimerId: null,
   officeHelperBubbleTimerId: null,
+  officeHelperBubbleFadeTimerId: null,
   officeHelperAskTimerId: null,
   officeHelperPromptTimerId: null,
   officeHelperBoredTimerId: null,
@@ -412,6 +413,7 @@ function showOfficeHelperBubble(text = OFFICE_HELPER_INTRO_TEXT, askDelay = OFFI
   state.officeHelperNextAskDelay = askDelay;
   clearOfficeHelperBubbleTimers();
   textElement.textContent = "";
+  bubble.classList.remove("is-leaving");
   bubble.classList.toggle("office-helper__bubble--prompt", variant === "prompt");
   bubble.classList.toggle("office-helper__bubble--bored", variant === "bored");
   bubble.hidden = false;
@@ -562,14 +564,17 @@ function hideOfficeHelperBubble() {
 
   clearOfficeHelperBubbleTimers();
 
-  if (textElement) {
-    textElement.textContent = "";
-  }
-
   if (bubble) {
-    bubble.classList.remove("office-helper__bubble--prompt");
-    bubble.classList.remove("office-helper__bubble--bored");
-    bubble.hidden = true;
+    if (!bubble.hidden) {
+      bubble.classList.add("is-leaving");
+      state.officeHelperBubbleFadeTimerId = window.setTimeout(() => {
+        finishOfficeHelperBubbleHide(bubble, textElement);
+      }, 420);
+    } else {
+      finishOfficeHelperBubbleHide(bubble, textElement);
+    }
+  } else if (textElement) {
+    textElement.textContent = "";
   }
 
   if (state.officeHelperOpened) {
@@ -578,6 +583,23 @@ function hideOfficeHelperBubble() {
   }
 
   scheduleOfficeHelperPrompt();
+}
+
+function finishOfficeHelperBubbleHide(bubble, textElement) {
+  state.officeHelperBubbleFadeTimerId = null;
+
+  if (textElement) {
+    textElement.textContent = "";
+  }
+
+  if (!bubble) {
+    return;
+  }
+
+  bubble.classList.remove("office-helper__bubble--prompt");
+  bubble.classList.remove("office-helper__bubble--bored");
+  bubble.classList.remove("is-leaving");
+  bubble.hidden = true;
 }
 
 function clearOfficeHelperBubbleTimers() {
@@ -589,6 +611,11 @@ function clearOfficeHelperBubbleTimers() {
   if (state.officeHelperBubbleTimerId) {
     window.clearTimeout(state.officeHelperBubbleTimerId);
     state.officeHelperBubbleTimerId = null;
+  }
+
+  if (state.officeHelperBubbleFadeTimerId) {
+    window.clearTimeout(state.officeHelperBubbleFadeTimerId);
+    state.officeHelperBubbleFadeTimerId = null;
   }
 
   if (state.officeHelperAskTimerId) {
@@ -608,9 +635,7 @@ function resetOfficeHelperBubble() {
   }
 
   if (bubble) {
-    bubble.classList.remove("office-helper__bubble--prompt");
-    bubble.classList.remove("office-helper__bubble--bored");
-    bubble.hidden = true;
+    finishOfficeHelperBubbleHide(bubble, textElement);
   }
 }
 
