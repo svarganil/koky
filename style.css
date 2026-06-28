@@ -23,7 +23,7 @@ body {
 @media (hover: hover) and (pointer: fine) {
   html,
   body {
-    cursor: url("./assets/cursor_normal.png") 2 2, auto;
+    cursor: url("./assets/cursor/cursor_normal.png") 2 2, auto;
   }
 
   a,
@@ -36,7 +36,7 @@ body {
   summary,
   .site-menu__credit-icon,
   .office-helper {
-    cursor: url("./assets/cursor_hover.png") 2 2, pointer;
+    cursor: url("./assets/cursor/cursor_hover.png") 2 2, pointer;
   }
 }
 
@@ -368,7 +368,7 @@ body.theme-night .night-star-field {
   display: block;
   width: 24px;
   height: 24px;
-  background-image: url("./assets/menu.png");
+  background-image: url("./assets/icons/menu.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -379,7 +379,7 @@ body.theme-night .night-star-field {
 }
 
 .menu-toggle[aria-expanded="true"] .menu-toggle__symbol {
-  background-image: url("./assets/close.png");
+  background-image: url("./assets/icons/close.png");
 }
 
 .site-menu {
@@ -1771,6 +1771,6 @@ body.theme-night .stage-sky::after {
   textarea,
   label,
   summary {
-    cursor: url("./assets/cursor_hover.png") 2 2, pointer;
+    cursor: url("./assets/cursor/cursor_hover.png") 2 2, pointer;
   }
 }

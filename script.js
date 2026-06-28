@@ -24,7 +24,7 @@ const LABELS = {
 };
 
 const SITE_SECTIONS = ["timer", "tips", "recipes", "chef"];
-const ALARM_AUDIO_SRC = "./assets/cluck.mp3";
+const ALARM_AUDIO_SRC = "./assets/sounds/cluck.mp3";
 const TIMER_GIFS = {
   peck: "./assets/gif/peck.gif",
   sleep: "./assets/gif/sleep.gif",
@@ -138,11 +138,11 @@ const THEME_COLORS = {
 const DAY_CLOUD_SCALE = 0.4;
 
 const DAY_CLOUDS = [
-  { src: "./assets/cloud1.png", width: 416 },
-  { src: "./assets/cloud2.png", width: 240 },
-  { src: "./assets/cloud3.png", width: 384 },
-  { src: "./assets/cloud4.png", width: 288 },
-  { src: "./assets/cloud5.png", width: 160 }
+  { src: "./assets/clouds/cloud1.png", width: 416 },
+  { src: "./assets/clouds/cloud2.png", width: 240 },
+  { src: "./assets/clouds/cloud3.png", width: 384 },
+  { src: "./assets/clouds/cloud4.png", width: 288 },
+  { src: "./assets/clouds/cloud5.png", width: 160 }
 ];
 
 const DAY_CLOUD_LAYOUTS = {
