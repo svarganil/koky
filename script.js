@@ -220,7 +220,8 @@ const state = {
   officeHelperFacts: [],
   officeHelperFactsPromise: null,
   officeHelperFactQueue: [],
-  officeHelperLastFactId: null
+  officeHelperLastFactId: null,
+  alarmPlaying: false
 };
 
 let currentTheme = "";
@@ -1836,31 +1837,13 @@ function getAlarmAudio() {
 
 function prepareAlarmSound() {
   const audio = getAlarmAudio();
-  const previousVolume = audio.volume || 1;
 
   audio.pause();
   audio.currentTime = 0;
   audio.loop = false;
-  audio.volume = 0;
-
-  const playPromise = audio.play();
-
-  if (!playPromise) {
-    audio.volume = previousVolume;
-    audio.load();
-    return;
-  }
-
-  playPromise
-    .then(() => {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.volume = previousVolume;
-    })
-    .catch(() => {
-      audio.volume = previousVolume;
-      audio.load();
-    });
+  audio.volume = 1;
+  state.alarmPlaying = false;
+  audio.load();
 }
 
 function playAlarm() {
@@ -1870,6 +1853,7 @@ function playAlarm() {
   audio.currentTime = 0;
   audio.loop = true;
   audio.volume = 1;
+  state.alarmPlaying = true;
 
   const playPromise = audio.play();
 
@@ -1884,11 +1868,13 @@ function showToast(elements) {
 }
 
 function stopAlarm(elements) {
-  if (state.alarmAudio) {
+  if (state.alarmAudio && state.alarmPlaying) {
     state.alarmAudio.pause();
     state.alarmAudio.currentTime = 0;
     state.alarmAudio.loop = false;
   }
+
+  state.alarmPlaying = false;
 
   if (elements) {
     elements.alarmToast.classList.remove("show");
