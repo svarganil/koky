@@ -453,21 +453,30 @@ body.theme-night .night-star-field {
 .site-menu__socials {
   display: flex;
   align-items: center;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
+  min-width: 0;
 }
 
 .site-menu__credit-icon {
-  width: 48px;
-  height: 36px;
-  flex: 0 0 48px;
+  --social-icon-width: 36px;
+  --social-icon-height: 36px;
+  width: var(--social-icon-width);
+  height: var(--social-icon-height);
+  flex: 0 0 var(--social-icon-width);
   position: relative;
   display: block;
   border-bottom: 0;
 }
 
+.site-menu__credit-icon--wide {
+  --social-icon-width: 48px;
+}
+
 .site-menu__credit-icon:hover,
 .site-menu__credit-icon:focus {
   border-bottom: 0;
+  transform: none;
 }
 
 .site-menu__credit-icon-image {
@@ -478,7 +487,7 @@ body.theme-night .night-star-field {
   display: block;
   object-fit: contain;
   image-rendering: pixelated;
-  transition: opacity 0.1s ease-in-out;
+  transition: none;
 }
 
 .site-menu__credit-icon-image--hover {
@@ -1636,8 +1645,25 @@ body.theme-night .stage-sky::after {
     height: 21px;
   }
 
+  .panel-head {
+    gap: 8px;
+  }
+
   .site-menu {
     width: 100%;
+  }
+
+  .site-menu__socials {
+    gap: 5px;
+  }
+
+  .site-menu__credit-icon {
+    --social-icon-width: 30px;
+    --social-icon-height: 30px;
+  }
+
+  .site-menu__credit-icon--wide {
+    --social-icon-width: 40px;
   }
 
   .site-menu__item {
